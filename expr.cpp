@@ -54,12 +54,9 @@ If we have to recognize asterisks and question marks as part of string contents:
         * Provide escaping version for strcspn ("\?", "\*")
         * Copy expression with escaped chars (remove '\'s not preceded by '\')
 */
-	        	char * newexpr = new char[usefullen + 1];
-	        	strncpy(newexpr, expression, usefullen); newexpr[usefullen] = 0;
-			ret = ! strncmp(newexpr, input, usefullen);
+			ret = ! strncmp(expression, input, usefullen);
 			if (ret)
 				ret = MatchesExpression(expression + usefullen, input + usefullen);
-		        delete[] newexpr;
 
 	}
 	return ret;
