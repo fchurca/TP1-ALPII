@@ -25,7 +25,7 @@ bool MatchesExpression(const std::string expression, const std::string input){
 	return MatchesExpression(expression.c_str(), input.c_str());
 }
 bool MatchesExpression(const char * expression, const char * input){
-	if(!(expression and input)) return false;	// If any is NULL abort
+	if(!(expression && input)) return false;	// If any is NULL abort
 	size_t
 		exprlen = strlen(expression),
 		usefullen = strcspn(expression, "*?");
@@ -36,24 +36,28 @@ If we have to recognize asterisks and question marks as part of string contents:
 */
 	char * newexpr = new char[usefullen + 1];
 	strncpy(newexpr, expression, usefullen); newexpr[usefullen] = 0;
-	bool ret;
+	bool ret = false;
 	switch (*expression){
 		case '*':
-/* TODO
-Provide '*' wildcard solving.
-Recursive, using strstr() ?
-*/
-			ret = false;
+			if (expression[1])
+				for(
+					expression++;
+					(! ret) && *input;
+					ret = MatchesExpression(expression, input++)
+				);
+			else
+				ret = true;
 			break;
-		case '?':
+		case '?':	// If there is a character, jump over it. Else, abort.
 			ret = *input ? MatchesExpression(expression + 1, input + 1) : false;
 			break;
 		case 0:
-			ret = !*input;
+			ret = ! *input;
 			break;
 		default:
-			ret = !strncmp(newexpr, input, usefullen);
-			if (ret) ret = MatchesExpression(expression + usefullen, input + usefullen);
+			ret = ! strncmp(newexpr, input, usefullen);
+			if (ret)
+				ret = MatchesExpression(expression + usefullen, input + usefullen);
 	}
 	delete[] newexpr;
 	return ret;
