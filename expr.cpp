@@ -2,11 +2,11 @@
 
 #include <cstring>
 
-using namespace std;
-
 #ifdef EXPR_DEBUG
 #include <iostream>
 #include <cstdlib>
+
+using namespace std;
 
 int main(int argc, char **argv){
 	string expression, input;
@@ -21,9 +21,10 @@ int main(int argc, char **argv){
 }
 #endif
 
-bool MatchesExpression(const std::string expression, const std::string input){
+bool MatchesExpression(const std::string &expression, const std::string &input){
 	return MatchesExpression(expression.c_str(), input.c_str());
 }
+
 bool MatchesExpression(const char * expression, const char * input){
 	if(!(expression && input)) return false;	// If any is NULL abort
 	size_t
