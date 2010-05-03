@@ -30,14 +30,7 @@ bool MatchesExpression(const char * expression, const char * input){
 	size_t
 		exprlen = strlen(expression),
 		usefullen = strcspn(expression, "*?");
-/* TODO
-If we have to recognize asterisks and question marks as part of string contents:
-	* Provide escaping version for strcspn ("\?", "\*")
-	* Copy expression with escaped chars (remove '\'s not preceded by '\')
-*/
-	char * newexpr = new char[usefullen + 1];
-	strncpy(newexpr, expression, usefullen); newexpr[usefullen] = 0;
-	bool ret = false;
+	bool ret;
 	switch (*expression){
 		case '*':
 			if (expression[1])
@@ -56,10 +49,18 @@ If we have to recognize asterisks and question marks as part of string contents:
 			ret = ! *input;
 			break;
 		default:
+/* TODO
+If we have to recognize asterisks and question marks as part of string contents:
+        * Provide escaping version for strcspn ("\?", "\*")
+        * Copy expression with escaped chars (remove '\'s not preceded by '\')
+*/
+	        	char * newexpr = new char[usefullen + 1];
+	        	strncpy(newexpr, expression, usefullen); newexpr[usefullen] = 0;
 			ret = ! strncmp(newexpr, input, usefullen);
 			if (ret)
 				ret = MatchesExpression(expression + usefullen, input + usefullen);
+		        delete[] newexpr;
+
 	}
-	delete[] newexpr;
 	return ret;
 }
