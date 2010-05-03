@@ -32,7 +32,7 @@ bool MatchesExpression(const char * expression, const char * input){
 		usefullen = strcspn(expression, "*?");
 	char * newexpr = new char[usefullen + 1];
 	strncpy(newexpr, expression, usefullen); newexpr[usefullen] = 0;
-	bool ret= strstr(newexpr, input);
+	bool ret= !strcmp(newexpr, input);
 /* TODO:
 If we have to recognize asterisks and question marks as part of string contents:
 	* Provide escaping version for strcspn ("\?", "\*")
