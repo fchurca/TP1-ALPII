@@ -2,7 +2,71 @@
 
 #include <cstring>
 
+/***************************************
+* MatchesExpression()
+*	Checks if the cstring input matches the search expression cstring expression
+*	Supported wildcards:
+*		'*'	: any string
+*		'?'	: any char
+***************************************/
+bool MatchesExpression(const char * expression, const char * input){
+	bool ret = false;
+// If none is NULL go on
+	if(expression && input){
+		switch (*expression){
+		// "Any string" wildcard
+			case '*':
+				expression++;
+			// Check only once if another '*' follows in the expression
+				if (expression[2] == '*')
+					ret = MatchesExpression(expression, input);
+			// If next isn't '*'...
+				else if (expression[1])
+				// ...until we find a match or we run out of input...
+					while((!ret) && *input)
+					// ...try the rest of the expression for each substring
+						ret = MatchesExpression(expression, input++);
+			// Match if the input is an empty string
+				else
+					ret = true;
+				break;
+		// "Any char" wildcard
+			case '?':
+			// If there is a character, jump over it
+				if (*input)
+					ret = MatchesExpression(expression + 1, input + 1);
+				break;
+		// Expression has ended
+			case 0:
+			// If the string has ended, match
+				ret = ! *input;
+				break;
+		// First character isn't wildcard
+			default:
+			// Length of expression to first of: end or first wildcard
+				size_t usefullen = strcspn(expression, "*?");
+			// Check if characters up to wildcard or end are same
+				if (ret = ! strncmp(expression, input, usefullen))
+				// In that case, continue checking from there on
+					ret = MatchesExpression(expression + usefullen, input + usefullen);
+		}
+// If both are NULL, match. Else, leave ret = false from init and abort.
+	} else if (expression == input)
+		ret = true;
+	return ret;
+}
+
+//**************************************
+// Wrapper for using MatchesExpression() with std::string
+bool MatchesExpression(const std::string &expression, const std::string &input){
+	return MatchesExpression(expression.c_str(), input.c_str());
+}
+
+//**************************************
+// main() for debugging
+
 #ifdef EXPR_DEBUG
+
 #include <iostream>
 #include <cstdlib>
 
@@ -10,54 +74,20 @@ using namespace std;
 
 int main(int argc, char **argv){
 	string expression, input;
-	cout << "Enter expression to match:" << endl;
-	getline(cin, expression);
-	cout << "Enter string where to look up the expression:" << endl;
-	getline(cin, input);
-	cout << "The string \"" << input << "\" "
-		<< (MatchesExpression(expression, input)? "matches" : "does not match")
-		<< " the expression \"" << expression << '\"' << endl;
+	while(cin){
+		cout << "Enter expression to match:" << endl;
+		getline(cin, expression);
+		cout << "Enter string where to look up the expression:" << endl;
+		getline(cin, input);
+		cout << "The string \"" << input << "\" "
+			<< (
+				MatchesExpression(expression, input)
+					? "matches"
+					: "does not match"
+				)
+			<< " the expression \"" << expression << '\"' << endl;
+	}
 	return EXIT_SUCCESS;
 }
+
 #endif
-
-bool MatchesExpression(const std::string &expression, const std::string &input){
-	return MatchesExpression(expression.c_str(), input.c_str());
-}
-
-bool MatchesExpression(const char * expression, const char * input){
-	if(!(expression && input)) return false;	// If any is NULL abort
-	size_t
-		exprlen = strlen(expression),
-		usefullen = strcspn(expression, "*?");
-	bool ret;
-	switch (*expression){
-		case '*':
-			if (expression[1])
-				for(
-					expression++;
-					(! ret) && *input;
-					ret = MatchesExpression(expression, input++)
-				);
-			else
-				ret = true;
-			break;
-		case '?':	// If there is a character, jump over it. Else, abort.
-			ret = *input ? MatchesExpression(expression + 1, input + 1) : false;
-			break;
-		case 0:
-			ret = ! *input;
-			break;
-		default:
-/* TODO
-If we have to recognize asterisks and question marks as part of string contents:
-        * Provide escaping version for strcspn ("\?", "\*")
-        * Copy expression with escaped chars (remove '\'s not preceded by '\')
-*/
-			ret = ! strncmp(expression, input, usefullen);
-			if (ret)
-				ret = MatchesExpression(expression + usefullen, input + usefullen);
-
-	}
-	return ret;
-}
