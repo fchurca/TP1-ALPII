@@ -4,20 +4,21 @@
 #include <string>
 
 class FSNode{
-	std::string name;
+	const char * name;
 	bool isDirectory;
 	time_t modTime;
 	size_t size;
 public:
 // Constructors
+	FSNode();
 	FSNode(const char * filename);
 	FSNode(std::string filename);
-	FSNode(); // No declaration forces using above constructors
 	void load(const char * filename);
 // Getters
 	const char * getname();
-	bool getisDir();
-	time_t getmodTime();
+	bool getisDirectory();
+	time_t getmodTimeRaw();
+	const char * getmodTime();
 	size_t getsize();
 };
 
