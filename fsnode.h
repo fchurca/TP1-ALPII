@@ -3,7 +3,7 @@
 
 #include <string>
 
-class FSnode{
+class FSNode{
 	std::string name;
 	bool isDirectory;
 	time_t modTime;
@@ -15,10 +15,8 @@ public:
 	FSNode(); // No declaration forces using above constructors
 // Getters
 	const char * getname();
-	const std::string & getname();
 	bool getisDir();
 	time_t getmodTime();
-	const std::string & getmodTime();
 	size_t getsize();
 };
 
