@@ -1,5 +1,6 @@
 #include "fsnode.h"
 #include <sys/stat.h>
+#include <stdexcept>
 
 FSNode::FSNode(){}
 FSNode::FSNode(const char * filename){
@@ -13,11 +14,17 @@ void FSNode::load(const char * filename){
 	struct stat filestats;
 	if (stat(filename, &filestats) >= 0){
 		this->name = filename;
-		this->size = filestats.st_size;
-		this->modTime = filestats.st_mtime;
 		this->isDirectory = S_ISDIR(filestats.st_mode);
-	}else
-		throw "AYEEEEEEE";
+		this->modTime = filestats.st_mtime;
+		if (this->isDirectory);
+		else
+			this->size = filestats.st_size;
+	}else{
+		std::string temp = "Could not open ";
+		temp += filename;
+		temp += " for stat()";
+		throw std::runtime_error(temp);
+	}
 }
 
 const char * FSNode::getname(){
@@ -44,22 +51,22 @@ size_t FSNode::getsize(){
 #include <iostream>
 using namespace std;
 
+void FSNode::dump(){
+	std::cout
+		<< this->getname() << '\t' << (this->getisDirectory() ? " D " : " F ")
+		<< '\t' << this->getsize() << " B "<< '\t' << this->getmodTime();
+}
+
 int main(int argc, char **argv){
 	FSNode
 		app(*argv),
 		here;
 	here.load(".");
-	cout
-		<< app.getname() << " ("
-		<< (app.getisDirectory() ? "directory" : "file") << "): " << endl
-		<< "Size: " << app.getsize() << " B"<< endl
-		<< "Last mod time: " << app.getmodTime()
-		<< here.getname() << " ("
-		<< (here.getisDirectory() ? "directory" : "file") << "): " << endl
-		<< "Size: " << app.getsize() << " B"<< endl
-		<< "Last mod time: " << here.getmodTime();
+
+	app.dump();
+	here.dump();
 
 	return EXIT_SUCCESS;
 }
 
-#endif
+#endif	// FSNODE_DEBUG

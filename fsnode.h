@@ -20,6 +20,11 @@ public:
 	time_t getmodTimeRaw();
 	const char * getmodTime();
 	size_t getsize();
+
+#ifdef FSNODE_DEBUG
+// Dump
+	void dump();
+#endif	// FSNODE_DEBUG
 };
 
-#endif
+#endif	// __FSNODE_H__
