@@ -8,6 +8,7 @@ class FSNode{
 	bool isDirectory;
 	time_t modTime;
 	size_t size;
+	void load(const char * filename);
 public:
 // Constructors
 	FSNode(const char * filename);
