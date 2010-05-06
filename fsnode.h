@@ -8,12 +8,12 @@ class FSNode{
 	bool isDirectory;
 	time_t modTime;
 	size_t size;
-	void load(const char * filename);
 public:
 // Constructors
 	FSNode(const char * filename);
 	FSNode(std::string filename);
 	FSNode(); // No declaration forces using above constructors
+	void load(const char * filename);
 // Getters
 	const char * getname();
 	bool getisDir();
