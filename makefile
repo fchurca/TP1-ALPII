@@ -24,6 +24,6 @@ Dfsnode: fsnode.cpp
 # clean: remove all binaries
 #	Add specific bin names here
 clean:
-	rm -f Dexpr Dfsnode *.o
+	rm -f Dexpr Dfsnode *.o *~
 
 .PHONY: clean debug

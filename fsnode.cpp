@@ -1,46 +1,103 @@
 #include "fsnode.h"
+
 #include <sys/stat.h>
+#include <dirent.h>
+#include <cstring>
+
 #include <stdexcept>
 
-FSNode::FSNode(){}
-FSNode::FSNode(const char * filename){
-	this->load(filename);
-}
-FSNode::FSNode(std::string filename){
-	this->load(filename.c_str());
+/***************************************
+* cantopen(const char *)
+*	Thinly disguised runtime_error throw
+*	DOES NOT RETURN
+***************************************/
+void cantopen(const char * path){
+	std::string temp = "Can't open ";
+	temp += path;
+	throw std::runtime_error(temp);
 }
 
-void FSNode::load(const char * filename){
+/***************************************
+* FSNode()
+*	Empty default constructor
+***************************************/
+FSNode::FSNode(){
+}
+
+/***************************************
+* FSNode(const char *)
+*	Load node information
+***************************************/
+FSNode::FSNode(const char * path){
+	this->load(path);
+}
+
+/***************************************
+* FSNode(const std::string &)
+*	Wrap to cstring version
+***************************************/
+FSNode::FSNode(const std::string & path){
+	this->load(path.c_str());
+}
+
+/***************************************
+* load(const char *)
+*	Load node information
+***************************************/
+void FSNode::load(const char * path){
 	struct stat filestats;
-	if (stat(filename, &filestats) >= 0){
-		this->name = filename;
-		this->isDirectory = S_ISDIR(filestats.st_mode);
+// Load POSIX node info
+	if (stat(path, &filestats) >= 0){
+		this->name = path;
 		this->modTime = filestats.st_mtime;
-		if (this->isDirectory);
-		else
+	// If node is a directory, count sub^1 elements and exclude self and parent
+		if (this->isDirectory = S_ISDIR(filestats.st_mode)){
+			DIR * dir;
+			if (!(dir = opendir(path))){
+				cantopen(path);
+			}
+			struct dirent *dp;
+			this->size = 0;
+			while(dp = readdir(dir)){
+				if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
+					this->size++;
+				}
+			}
+			closedir(dir);
+	// If node is a file, store filesize in bytes
+		}else{
 			this->size = filestats.st_size;
+		}
 	}else{
-		std::string temp = "Could not open ";
-		temp += filename;
-		temp += " for stat()";
-		throw std::runtime_error(temp);
+		this->size = this->modTime = this->isDirectory = 0;
+		cantopen(path);
 	}
 }
 
-const char * FSNode::getname(){
+/***************************************
+* load(const std::string &)
+*	Wrap to cstring version
+***************************************/
+void FSNode::load(const std::string & path){
+	this->load(path.c_str());
+}
+
+//**************************************
+// Getters
+const char * FSNode::getname() const{
 	return this->name;
 }
-bool FSNode::getisDirectory(){
+bool FSNode::getisDirectory() const{
 	return this->isDirectory;
 }
-time_t FSNode::getmodTimeRaw(){
+time_t FSNode::getmodTimeRaw() const{
 	return this->modTime;
 }
-const char * FSNode::getmodTime(){
+const char * FSNode::getmodTime() const{
 	return ctime(&this->modTime);
 }
-size_t FSNode::getsize(){
-	 return this->size;
+size_t FSNode::getsize() const{
+	return this->size;
 }
 
 #ifdef FSNODE_DEBUG
@@ -53,18 +110,21 @@ using namespace std;
 
 void FSNodeDump(FSNode & node){
 	std::cout
-		<< node.getname() << '\t' << (node.getisDirectory() ? " D " : " F ")
-		<< '\t' << node.getsize() << " B "<< '\t' << node.getmodTime();
+		<< node.getname() << '\t'
+		<< (node.getisDirectory()? " D " : " F ") << '\t'
+		<< node.getsize() << (node.getisDirectory()? " elements" : " B") << '\t'
+		<< node.getmodTime();
 }
 
 int main(int argc, char **argv){
-	FSNode
-		app(*argv),
-		here;
-	here.load(".");
-
-	FSNodeDump(app);
-	FSNodeDump(here);
+	for(size_t i = 0; i < argc; i++){
+		try{
+			FSNode node(argv[i]);
+			FSNodeDump(node);
+		}catch(runtime_error e){
+			cerr << e.what() << endl;
+		}
+	}
 
 	return EXIT_SUCCESS;
 }
