@@ -19,9 +19,10 @@ void cantopen(const char * path){
 
 /***************************************
 * FSNode()
-*	Empty default constructor
+*	Zeroing default constructor
 ***************************************/
 FSNode::FSNode(){
+	this->size = this->modTime = this->isDirectory = 0;
 }
 
 /***************************************
