@@ -106,7 +106,7 @@ std::string humansize(size_t size){
 	const char pows[] = "BKMG";
 	std::stringstream ss;
 	size_t scale = 0;
-	while((size > 1024) && (scale + 1 < sizeof(pows))){
+	while ((size > 1024) && (scale + 1 < sizeof(pows))){
 		size /= 1024;
 		scale++;
 	}
@@ -135,7 +135,7 @@ void FSNodeDump(FSNode & node){
 }
 
 int main(int argc, char **argv){
-	for(size_t i = 0; i < argc; i++){
+	for (size_t i = 0; i < argc; i++){
 		try{
 			FSNode node(argv[i]);
 			FSNodeDump(node);
