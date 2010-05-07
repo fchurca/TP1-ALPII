@@ -7,7 +7,7 @@ expr: expr.cpp
 
 #	Make debug bin
 Dexpr: expr.cpp
-	c++ $? -o $@ -DEXPR_DEBUG
+	c++ $? -g -o $@ -DEXPR_DEBUG
 
 ####################################
 # fsnode: file system node model
@@ -18,7 +18,7 @@ fsnode: fsnode.cpp
 
 #	Make debug bin
 Dfsnode: fsnode.cpp
-	c++ $? -o $@ -DFSNODE_DEBUG
+	c++ $? -g -o $@ -DFSNODE_DEBUG
 
 ####################################
 # clean: remove all binaries
@@ -26,4 +26,4 @@ Dfsnode: fsnode.cpp
 clean:
 	rm -f Dexpr Dfsnode *.o *~
 
-.PHONY: clean debug
+.PHONY: clean
