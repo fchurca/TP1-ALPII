@@ -51,10 +51,10 @@ size_t FSNode::getsize(){
 #include <iostream>
 using namespace std;
 
-void FSNode::dump(){
+void FSNodeDump(FSNode & node){
 	std::cout
-		<< this->getname() << '\t' << (this->getisDirectory() ? " D " : " F ")
-		<< '\t' << this->getsize() << " B "<< '\t' << this->getmodTime();
+		<< node.getname() << '\t' << (node.getisDirectory() ? " D " : " F ")
+		<< '\t' << node.getsize() << " B "<< '\t' << node.getmodTime();
 }
 
 int main(int argc, char **argv){
@@ -63,8 +63,8 @@ int main(int argc, char **argv){
 		here;
 	here.load(".");
 
-	app.dump();
-	here.dump();
+	FSNodeDump(app);
+	FSNodeDump(here);
 
 	return EXIT_SUCCESS;
 }
