@@ -2,6 +2,7 @@
 #define __FSNODE_H__
 
 #include <string>
+#include <cstdlib>
 
 /***************************************
 * cantopen()
@@ -55,5 +56,7 @@ protected:
 	time_t modTime;
 	size_t size;
 };
+
+std::string humansize(size_t size);
 
 #endif	// __FSNODE_H__

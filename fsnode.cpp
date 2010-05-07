@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include <stdexcept>
+#include <sstream>
 
 /***************************************
 * cantopen(const char *)
@@ -101,6 +102,18 @@ size_t FSNode::getsize() const{
 	return this->size;
 }
 
+std::string humansize(size_t size){
+	const char pows[] = "BKMG";
+	std::stringstream ss;
+	size_t scale = 0;
+	while((size > 1024) && (scale + 1 < sizeof(pows))){
+		size /= 1024;
+		scale++;
+	}
+	ss << size << ' ' << pows[scale];
+	return ss.str();
+}
+
 #ifdef FSNODE_DEBUG
 
 #include <cstdlib>
@@ -111,10 +124,14 @@ using namespace std;
 
 void FSNodeDump(FSNode & node){
 	std::cout
-		<< node.getname() << '\t'
-		<< (node.getisDirectory()? " D " : " F ") << '\t'
-		<< node.getsize() << (node.getisDirectory()? " elements" : " B") << '\t'
-		<< node.getmodTime();
+		<< (node.getisDirectory()? "dir" : "file") << '\t'
+		<< node.getname() << '\t';
+	if (node.getisDirectory()){
+		cout << node.getsize() << " elements";
+	}else{
+		cout << humansize(node.getsize());
+	}
+	cout << '\t' << node.getmodTime();
 }
 
 int main(int argc, char **argv){
@@ -126,7 +143,6 @@ int main(int argc, char **argv){
 			cerr << e.what() << endl;
 		}
 	}
-
 	return EXIT_SUCCESS;
 }
 
