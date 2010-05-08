@@ -105,12 +105,14 @@ size_t FSNode::getsize() const{
 std::string humansize(size_t size){
 	const char pows[] = "BKMG";
 	std::stringstream ss;
-	size_t scale = 0;
-	while ((size > 1024) && (scale + 1 < sizeof(pows))){
-		size /= 1024;
+	size_t scale = 1;
+	float humansize = size;
+	while ((humansize > 1024) && (scale < sizeof(pows))){
+		humansize /= 1024.0;
 		scale++;
 	}
-	ss << size << ' ' << pows[scale];
+	ss.precision(3);
+	ss << humansize << ' ' << pows[scale - 1];
 	return ss.str();
 }
 
