@@ -44,14 +44,16 @@ public:
 
 //**************************************
 // Getters
-	const char * getname() const;
+	const std::string &getname() const;
+	const std::string &getpath() const;
 	bool getisDirectory() const;
 	time_t getmodTimeRaw() const;
 	const char * getmodTime() const;
 	size_t getsize() const;
 
 protected:
-	const char * name;
+	std::string name;
+	std::string path;
 	bool isDirectory;
 	time_t modTime;
 	size_t size;
