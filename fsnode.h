@@ -57,6 +57,8 @@ protected:
 	bool isDirectory;
 	time_t modTime;
 	size_t size;
+
+friend class FSModel;
 };
 
 std::string humansize(size_t size);
