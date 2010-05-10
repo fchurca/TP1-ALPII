@@ -64,7 +64,7 @@ void FSNode::load(const char * path){
 			while(dp = readdir(dir)){
 				stat(dp->d_name, &tempstat);
 				if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
-					this->size += tempstat.st_size;
+					this->size ++;
 				}
 			}
 			closedir(dir);
@@ -132,9 +132,13 @@ using namespace std;
 void FSNodeDump(FSNode & node){
 	std::cout
 		<< (node.getisDirectory()? "dir" : "file") << '\t'
-		<< node.getname() << '\t'
-		<< humansize(node.getsize()) << '\t'
-		<< node.getmodTime();
+		<< node.getname() << '\t';
+	if (node.getisDirectory()){
+		std::cout << node.getsize() << " E";
+	} else {
+		std::cout << humansize(node.getsize());
+	}
+	cout << '\t' << node.getmodTime();
 }
 
 int main(int argc, char **argv){
