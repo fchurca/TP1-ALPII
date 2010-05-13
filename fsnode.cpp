@@ -20,10 +20,9 @@ void cantopen(const char * path){
 
 /***************************************
 * FSNode()
-*	Zeroing default constructor
+*	Empty default constructor
 ***************************************/
 FSNode::FSNode(){
-	this->size = this->modTime = this->isDirectory = 0;
 }
 
 /***************************************
@@ -47,33 +46,27 @@ FSNode::FSNode(const std::string & path){
 *	Load node information
 ***************************************/
 void FSNode::load(const char * path){
-	struct stat filestats;
 // Load POSIX node info
-	if (stat(path, &filestats) >= 0){
+	if (stat(path, &(this->filestats)) >= 0){
 		this->name = path;
-		this->modTime = filestats.st_mtime;
 	// If node is a directory, count sub^1 elements and exclude self and parent
-		if (this->isDirectory = S_ISDIR(filestats.st_mode)){
+		if (S_ISDIR(this->filestats.st_mode)){
 			DIR * dir;
+			this->filestats.st_size = 0;
 			if (!(dir = opendir(path))){
 				cantopen(path);
 			}
 			struct dirent *dp;
 			struct stat tempstat;
-			this->size = 0;
 			while(dp = readdir(dir)){
 				stat(dp->d_name, &tempstat);
 				if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
-					this->size ++;
+					this->filestats.st_size++;
 				}
 			}
 			closedir(dir);
-	// If node is a file, store filesize in bytes
-		}else{
-			this->size = filestats.st_size;
 		}
 	}else{
-		this->size = this->modTime = this->isDirectory = 0;
 		cantopen(path);
 	}
 }
@@ -98,18 +91,18 @@ std::string FSNode::getfullname() const{
 	return this->fullname;
 }
 bool FSNode::getisDirectory() const{
-	return this->isDirectory;
+	return S_ISDIR(this->filestats.st_mode);
 }
 time_t FSNode::getmodTimeRaw() const{
-	return this->modTime;
+	return this->filestats.st_mtime;
 }
 std::string FSNode::getmodTime() const{
-	std::string aux = ctime(&this->modTime);
+	std::string aux = ctime(&this->filestats.st_mtime);
 	aux.erase(aux.length() - 1);
 	return aux;
 }
 size_t FSNode::getsize() const{
-	return this->size;
+	return this->filestats.st_size;
 }
 
 std::string humansize(size_t size){
@@ -140,7 +133,7 @@ void FSNodeDump(FSNode & node){
 		<< (node.getisDirectory()? "dir" : "file") << '\t';
 	if (node.getisDirectory()){
 		std::cout << node.getsize() << " E";
-	} else {
+	}else{
 		std::cout << humansize(node.getsize());
 	}
 	std::cout

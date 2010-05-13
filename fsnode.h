@@ -4,6 +4,8 @@
 #include <string>
 #include <cstdlib>
 
+#include <sys/stat.h>
+
 //**************************************
 // cantopen()
 //	Thinly disguised runtime_error throw
@@ -33,7 +35,7 @@ public:
 
 //******************
 // FSNode(const std::string & path)
-//	Wrapper for using cstring version without calling std::string::c_str()
+//	Wrap to cstring version
 //	May throw runtime_error if path is unreachable
 	FSNode(const std::string & path);
 
@@ -45,7 +47,7 @@ public:
 
 //******************
 // load(const std::string &)
-//	Wrapper for using cstring version without calling std::string::c_str()
+//	Wrap to cstring version
 //	May throw runtime_error if path is unreachable
 	void load(const std::string & path);
 
@@ -65,6 +67,7 @@ public:
 
 //******************
 // Node type
+//	Devices show up as size 0 files
 	bool getisDirectory() const;
 
 //******************
@@ -85,6 +88,9 @@ public:
 // Members
 protected:
 //******************
+// POSIX filestats
+	struct stat filestats;
+//******************
 // Filename
 	std::string name;
 //******************
@@ -93,16 +99,6 @@ protected:
 //******************
 // Full filename
 	std::string fullname;
-//******************
-// Whether the node is a directory (true) or a file (false)
-//	Devices show up as size 0 files
-	bool isDirectory;
-//******************
-// Unix time of last modification
-	time_t modTime;
-//******************
-// Sub(1)elements if directory, or size of the node in bytes if file
-	size_t size;
 
 //**************************************
 // Friends
