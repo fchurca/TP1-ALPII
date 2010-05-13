@@ -4,12 +4,16 @@
 #include <string>
 #include <cstdlib>
 
-/***************************************
-* cantopen()
-*	Thinly disguised runtime_error throw
-*	DOES NOT RETURN
-***************************************/
+//**************************************
+// cantopen()
+//	Thinly disguised runtime_error throw
+//	DOES NOT RETURN
 void cantopen(const char * path);
+
+//**************************************
+// humansize()
+//	Translates a size_t size in bytes into STL string with binary powers
+std::string humansize(size_t size);
 
 class FSNode{
 public:
@@ -49,61 +53,65 @@ public:
 // Getters
 
 //******************
-//	Get local name of the file
+// Filename
 	const std::string &getname() const;
-
 //******************
-//	Get file location
+// File location
 	const std::string &getpath() const;
 
 //******************
-//	Get full filename
+// Full filename
 	std::string getfullname() const;
 
 //******************
-//	Get node type
+// Node type
 	bool getisDirectory() const;
 
 //******************
-//	Get Unix time of last modification
+// Unix time of last modification
 	time_t getmodTimeRaw() const;
 
 //******************
-//	Get time of last modification as C string
-//		FOR dmr , KEN AND KERNIGHAN'S SAKE COPY CONTENTS, DON'T USE AS POINTER
-	const char * getmodTime() const;
+// Time of last modification as STL string
+//	Www Mmm dd hh:mm:ss YYYY
+	std::string getmodTime() const;
 
 //******************
-//	Get sub(1)elements of the directory, or size of the node in bytes if file
+// Size
+//	Sub(1)elements if directory, or size of the node in bytes if file
 	size_t getsize() const;
 
 //**************************************
 // Members
 protected:
 //******************
-//	Filename
+// Filename
 	std::string name;
 //******************
-//	File location
+// File location
 	std::string path;
 //******************
-//	Full filename
+// Full filename
 	std::string fullname;
 //******************
-//	Whether the node is a directory (true) or a file (false)
-//		Devices show up as size 0 files
+// Whether the node is a directory (true) or a file (false)
+//	Devices show up as size 0 files
 	bool isDirectory;
 //******************
-//	Unix time of last modification
+// Unix time of last modification
 	time_t modTime;
 //******************
-//	Sub(1)elements of the directory, or size of the node in bytes if file
+// Sub(1)elements if directory, or size of the node in bytes if file
 	size_t size;
 
-friend class FSModel;	//	Let FSModel have direct access to members
-						//		
-};
+//**************************************
+// Friends
 
-std::string humansize(size_t size);
+//******************
+// class FSModel
+//	Will need access to protected members to be able to load them more quickly
+//	(albeit less elegantly)
+friend class FSModel;
+};
 
 #endif	// __FSNODE_H__

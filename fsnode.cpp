@@ -103,24 +103,27 @@ bool FSNode::getisDirectory() const{
 time_t FSNode::getmodTimeRaw() const{
 	return this->modTime;
 }
-const char * FSNode::getmodTime() const{
-	return ctime(&this->modTime);
+std::string FSNode::getmodTime() const{
+	std::string aux = ctime(&this->modTime);
+	aux.erase(aux.length() - 1);
+	return aux;
 }
 size_t FSNode::getsize() const{
 	return this->size;
 }
 
 std::string humansize(size_t size){
-	const char pows[] = "BKMG";
+	const char pows[] = "BkMG";
 	std::stringstream ss;
 	size_t scale = 1;
-	float humansize = size;
-	while ((humansize > 1024) && (scale < sizeof(pows))){
-		humansize /= 1024.0;
+	while ((size > 1024) && (scale < sizeof(pows))){
+		size >>= 10;
 		scale++;
 	}
-	ss.precision(3);
-	ss << humansize << ' ' << pows[scale - 1];
+	ss << size << ' ' << pows[scale - 1];
+	if (scale > 1){
+		ss << 'i';
+	}
 	return ss.str();
 }
 
@@ -134,14 +137,15 @@ using namespace std;
 
 void FSNodeDump(FSNode & node){
 	std::cout
-		<< (node.getisDirectory()? "dir" : "file") << '\t'
-		<< node.getname() << '\t';
+		<< (node.getisDirectory()? "dir" : "file") << '\t';
 	if (node.getisDirectory()){
 		std::cout << node.getsize() << " E";
 	} else {
 		std::cout << humansize(node.getsize());
 	}
-	cout << '\t' << node.getmodTime();
+	std::cout
+		<< '\t' << node.getmodTime() << '\t'
+		<< node.getname() << endl;
 }
 
 int main(int argc, char **argv){
