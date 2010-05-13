@@ -28,7 +28,7 @@ fsmodel: fsmodel.cpp
 	c++ $? -c
 
 #	Make debug bin
-Dfsnode: fsmodel.cpp
+Dfsmodel: fsmodel.cpp
 	c++ $? -g -o $@ -DFSMODEL_DEBUG
 
 ####################################

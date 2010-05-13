@@ -58,7 +58,7 @@ public:
 
 //******************
 //	Get full filename
-	std::string fullname() const;
+	std::string getfullname() const;
 
 //******************
 //	Get node type
