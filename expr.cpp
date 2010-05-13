@@ -88,7 +88,8 @@ int main(int argc, char **argv){
 		getline(cin, expression);
 		cout << "Enter string where to look up the expression:" << endl;
 		getline(cin, input);
-		cout << "The string \"" << input << "\" "
+		cout
+			<< "The string \"" << input << "\" "
 			<< (
 				MatchesExpression(expression, input)
 					? "matches"
