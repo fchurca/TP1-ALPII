@@ -21,20 +21,31 @@ Dfsnode: fsnode.cpp
 	c++ $? -g -o $@ -DFSNODE_DEBUG
 
 ####################################
-# fsnode: file system tree model
+# fsmodel: file system tree model; vector version
 
 #	Make library
-fsmodel: fsmodel.cpp
-	c++ $? -c
+Vfsmodel: fsmodel.cpp fsnode.cpp
+	c++ $? -c -DFSMODEL_VECTOR
 
 #	Make debug bin
-Dfsmodel: fsmodel.cpp
-	c++ $? -g -o $@ -DFSMODEL_DEBUG
+DVfsmodel: fsmodel.cpp fsnode.cpp
+	c++ $? -g -o $@ -DFSMODEL_DEBUG -DFSMODEL_VECTOR
+
+####################################
+# fsmodel: file system tree model; list version
+
+#	Make library
+Lfsmodel: fsmodel.cpp fsnode.cpp
+	c++ $? -c -DFSMODEL_LIST
+
+#	Make debug bin
+DLfsmodel: fsmodel.cpp fsnode.cpp
+	c++ $? -g -o $@ -DFSMODEL_DEBUG -DFSMODEL_LIST
 
 ####################################
 # clean: remove all binaries
 #	Add specific bin names here
 clean:
-	rm -f Dexpr Dfsnode *.o *~
+	rm -f Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
 
 .PHONY: clean
