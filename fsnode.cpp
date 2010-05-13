@@ -94,6 +94,9 @@ const std::string & FSNode::getname() const{
 const std::string & FSNode::getpath() const{
 	return this->path;
 }
+std::string FSNode::getfullname() const{
+	return this->fullname;
+}
 bool FSNode::getisDirectory() const{
 	return this->isDirectory;
 }
