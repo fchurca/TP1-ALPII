@@ -16,7 +16,7 @@
 FSNode::FSNode(){
 	this->isdir = false;
 	this-> size = 0;
-	this -> mtime = 0;
+	this-> mtime = 0;
 }
 
 //******************
@@ -37,6 +37,8 @@ FSNode::FSNode(const std::string & path){
 // load(const char *)
 //	Load node information
 void FSNode::load(const char * path){
+// Set full name
+	this->fullname = path;
 // Load POSIX node info
 	struct stat rootstat;	
 	if (stat(path, &rootstat) >= 0){
@@ -99,7 +101,7 @@ size_t FSNode::getsize() const{
 }
 
 std::string humansize(size_t size){
-	const char pows[] = "BkMGTPEZY";
+	const char pows[] = "BKMGTPEZY";
 	std::stringstream ss;
 	size_t scale = 1;
 	while ((size > 1024) && (scale < sizeof(pows))){
@@ -122,27 +124,32 @@ using namespace std;
 
 void FSNodeDump(FSNode & node){
 	std::cout
-		<< (node.getisDirectory()? "dir" : "file") << '\t';
+		<< (node.getisDirectory()? "dir  " : "file ");
 	if (node.getisDirectory()){
 		std::cout << node.getsize() << " E";
 	}else{
 		std::cout << humansize(node.getsize());
 	}
 	std::cout
-		<< '\t' << node.getmodTime() << '\t'
-		<< node.getname() << endl;
+		<< '\t' << node.getCmtime() << ' '
+		<< node.getfullname() << endl;
 }
 
 int main(int argc, char **argv){
-	for (size_t i = 0; i < argc; i++){
-		try{
-			FSNode node(argv[i]);
-			FSNodeDump(node);
-		}catch(runtime_error e){
-			cerr << e.what() << endl;
+	int ret = EXIT_SUCCESS;
+	if (argc > 1){
+		for (size_t i = 1; i < argc; i++){
+			try{
+				FSNode node(argv[i]);
+				FSNodeDump(node);
+			}catch(runtime_error e){
+				cerr << e.what() << endl;
+			}
 		}
+	}else{
+		cout << "Usage: " << *argv << " file1[file2[...]]" << endl;
 	}
-	return EXIT_SUCCESS;
+	return ret;
 }
 
 #endif	// FSNODE_DEBUG
