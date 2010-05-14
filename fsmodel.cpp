@@ -56,6 +56,7 @@ size_t FSModel::load(const std::string & path){
 		// Ignore self, parent
 			if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
 				localsize++;
+				this->size++;
 			// Prepare to insert at end
 				container::iterator insertionpoint = this->contents.end();
 				if (curnode.isdir){
@@ -66,7 +67,7 @@ size_t FSModel::load(const std::string & path){
 				// Load directory's children.
 					// And its children's children.
 						// And its children's children's children...
-					curnode.size = this->load(curnode.fullname);
+					localsize += curnode.size = this->load(curnode.fullname);
 					insertionpoint++;
 				}
 			// Insert at saved location
@@ -78,7 +79,6 @@ size_t FSModel::load(const std::string & path){
 		throw std::runtime_error(std::string(path) + " not a valid dir");
 	}
 	this->path = path;
-	this->size += localsize;
 	return localsize;
 }
 
