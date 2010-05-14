@@ -38,8 +38,8 @@ size_t FSModel::load(const std::string & path){
 	}
 
 /* Set node path and add slash if missing. If on Microsoft Windows, the slash
-*	is mandatory too, as we are using a POSIX environment in the first place
-*	(Interix / SUA / GNUWin / Xming / Cygwin / MinGW)
+*	is mandatory too, since we are using a POSIX environment in the first
+*	place (Interix / SUA / GNUWin / Xming / Cygwin / MinGW)
 */	
 	curnode.path = path;
 	if (path[path.length()-1] != '/'){
@@ -89,7 +89,7 @@ void FSModel::dump(std::ostream & out) const{
 	out
 		<< "Contents of " << this->path << std::endl
 		<< "Total: " << this->size << " elements" << std::endl
-		<< "Type\tSize\tDate                    \tName" << std::endl;
+		<< "Type Size\tDate                     Name" << std::endl;
 	for (
 		container::const_iterator
 			iterator = this->contents.begin(),
@@ -98,14 +98,14 @@ void FSModel::dump(std::ostream & out) const{
 		iterator++
 	){
 		out
-			<< (iterator->isdir? "dir" : "file") << '\t';
+			<< (iterator->isdir? "dir  " : "file ");
 		if (iterator->getisDirectory()){
 			out << iterator->size << " E";
 		}else{
 			out << humansize(iterator->size);
 		}
 		out
-			<< '\t' << iterator->getCmtime() << '\t'
+			<< '\t' << iterator->getCmtime() << ' '
 			<< iterator->getfullname() << std::endl;
 	}
 }
@@ -138,6 +138,8 @@ int main(int argc, char **argv){
 		}catch(std::runtime_error e){
 			cerr << e.what() << endl << "Aborting" << endl;
 			ret = EXIT_FAILURE;
+		}catch(std::exception e){
+			cerr << e.what() << endl << "Aborting" << endl;
 		}catch(...){
 			cerr << "Unhandled exception" << endl << "Aborting" << endl;
 			ret = EXIT_FAILURE;
