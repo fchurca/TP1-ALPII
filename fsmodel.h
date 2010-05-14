@@ -44,11 +44,18 @@ public:
 //******************
 // dump(std::ostream&)
 //	Dump contents. unfiltered, to std::ostream out
-	void dump(std::ostream & out);
+	void dump(std::ostream & out) const;
+
+//**************************
+// Getters
+	const container & getcontents() const;
+	const std::string & getpath() const;
+	size_t getsize() const;
 
 protected:
 	container contents;
 	std::string path;
+	size_t size;
 };
 #else
 #error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
