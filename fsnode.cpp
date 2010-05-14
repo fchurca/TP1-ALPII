@@ -7,79 +7,72 @@
 #include <stdexcept>
 #include <sstream>
 
-/***************************************
-* cantopen(const char *)
-*	Thinly disguised runtime_error throw
-*	DOES NOT RETURN
-***************************************/
-void cantopen(const char * path){
-	std::string temp = "Can't open ";
-	temp += path;
-	throw std::runtime_error(temp);
-}
+//**************************************
+// FSNode methods
 
-/***************************************
-* FSNode()
-*	Empty default constructor
-***************************************/
+//******************
+// FSNode()
+//	Zeroing default constructor
 FSNode::FSNode(){
+	this->isdir = false;
+	this-> size = 0;
+	this -> mtime = 0;
 }
 
-/***************************************
-* FSNode(const char *)
-*	Load node information
-***************************************/
+//******************
+// FSNode(const char * path)
+//	Load node information
 FSNode::FSNode(const char * path){
 	this->load(path);
 }
 
-/***************************************
-* FSNode(const std::string &)
-*	Wrap to cstring version
-***************************************/
+//******************
+// FSNode(const std::string & path)
+//	Wrap to cstring version
 FSNode::FSNode(const std::string & path){
 	this->load(path.c_str());
 }
 
-/***************************************
-* load(const char *)
-*	Load node information
-***************************************/
+//******************
+// load(const char *)
+//	Load node information
 void FSNode::load(const char * path){
 // Load POSIX node info
-	if (stat(path, &(this->filestats)) >= 0){
-		this->name = path;
+	struct stat rootstat;	
+	if (stat(path, &rootstat) >= 0){
+		this->mtime = rootstat.st_mtime;
 	// If node is a directory, count sub^1 elements and exclude self and parent
-		if (S_ISDIR(this->filestats.st_mode)){
-			DIR * dir;
-			this->filestats.st_size = 0;
-			if (!(dir = opendir(path))){
-				cantopen(path);
+		if (this->isdir = S_ISDIR(rootstat.st_mode)){
+			this->size = 0;
+			DIR * dir = opendir(path);
+			if (!dir){
+				throw std::runtime_error(std::string(path) + " not a valid dir");
 			}
 			struct dirent *dp;
 			struct stat tempstat;
 			while(dp = readdir(dir)){
 				stat(dp->d_name, &tempstat);
 				if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
-					this->filestats.st_size++;
+					this->size++;
 				}
 			}
 			closedir(dir);
+		}else{
+			this->size = rootstat.st_size;
 		}
 	}else{
-		cantopen(path);
+			throw std::runtime_error(std::string("Can't open ") + path);
 	}
 }
 
-/***************************************
-* load(const std::string &)
-*	Wrap to cstring version
-***************************************/
+//******************
+// load(const std::string &)
+//	Wrap to cstring version
 void FSNode::load(const std::string & path){
 	this->load(path.c_str());
 }
 
-//**************************************
+//**************************
 // Getters
 const std::string & FSNode::getname() const{
 	return this->name;
@@ -91,22 +84,22 @@ std::string FSNode::getfullname() const{
 	return this->fullname;
 }
 bool FSNode::getisDirectory() const{
-	return S_ISDIR(this->filestats.st_mode);
+	return this->isdir;
 }
-time_t FSNode::getmodTimeRaw() const{
-	return this->filestats.st_mtime;
+time_t FSNode::getmtime() const{
+	return this->mtime;
 }
-std::string FSNode::getmodTime() const{
-	std::string aux = ctime(&this->filestats.st_mtime);
+std::string FSNode::getCmtime() const{
+	std::string aux = ctime(&this->mtime);
 	aux.erase(aux.length() - 1);
 	return aux;
 }
 size_t FSNode::getsize() const{
-	return this->filestats.st_size;
+	return this->size;
 }
 
 std::string humansize(size_t size){
-	const char pows[] = "BkMG";
+	const char pows[] = "BkMGTPEZY";
 	std::stringstream ss;
 	size_t scale = 1;
 	while ((size > 1024) && (scale < sizeof(pows))){
@@ -122,7 +115,6 @@ std::string humansize(size_t size){
 
 #ifdef FSNODE_DEBUG
 
-#include <cstdlib>
 #include <ctime>
 
 #include <iostream>

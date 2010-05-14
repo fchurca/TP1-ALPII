@@ -7,12 +7,6 @@
 #include <sys/stat.h>
 
 //**************************************
-// cantopen()
-//	Thinly disguised runtime_error throw
-//	DOES NOT RETURN
-void cantopen(const char * path);
-
-//**************************************
 // humansize()
 //	Translates a size_t size in bytes into STL string with binary powers
 std::string humansize(size_t size);
@@ -54,51 +48,41 @@ public:
 //**************************
 // Getters
 
-//******************
-// Filename
 	const std::string &getname() const;
-//******************
-// File location
 	const std::string &getpath() const;
-
-//******************
-// Full filename
 	std::string getfullname() const;
-
-//******************
-// Node type
-//	Devices show up as size 0 files
 	bool getisDirectory() const;
-
-//******************
-// Unix time of last modification
-	time_t getmodTimeRaw() const;
-
-//******************
-// Time of last modification as STL string
-//	Www Mmm dd hh:mm:ss YYYY
-	std::string getmodTime() const;
-
-//******************
-// Size
-//	Sub(1)elements if directory, or size of the node in bytes if file
+	time_t getmtime() const;
+	std::string getCmtime() const;
 	size_t getsize() const;
 
 //**************************************
 // Members
 protected:
 //******************
-// POSIX filestats
-	struct stat filestats;
-//******************
 // Filename
 	std::string name;
+
 //******************
 // File location
 	std::string path;
+
 //******************
 // Full filename
 	std::string fullname;
+	
+//******************
+// Node type
+//	true if directory, false if file or device
+	bool isdir;
+
+//******************
+// Sub(1)elements if directory, or size of the node in bytes if file
+	size_t size;
+
+//******************
+// Unix time of last modification
+	time_t mtime;
 
 //**************************************
 // Friends
