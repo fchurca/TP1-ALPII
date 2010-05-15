@@ -1,7 +1,5 @@
 #include "expr.h"
 
-#include <cstring>
-
 //**************************************
 // MatchesExpression()
 //	Checks if the input matches the search expression
@@ -14,47 +12,55 @@ bool MatchesExpression(const char * expression, const char * input){
 // If none is NULL go on. If any or both are NULL, leave mismatch.
 	if (expression && input){
 	// According to first character of expression:
-		switch (*expression){
-		// "Any string" wildcard
+	switch (*expression){
+	// Expression has ended
+		case 0:
+		// Match if the string has ended too
+			ret = ! *input;
+			break;
+	// "Any string" wildcard
+		case '*':
+		// According to second character:
+			switch (expression[1]){
+		// Expression is "*": match any string
+			case 0:
+				ret = true;
+				break;
+		// Expression begins with "**": skip first asterisk
+		//	Can surf a long asterisk chain recursively
 			case '*':
-			// If there is something else to match
-				if (expression[1]){
-				// Go to the rest of the expression
-					expression++;
-				// If the input is not an empty string...
-					if (*input){
-						do {
-						// ...try the rest of the expression for each substring
-							ret = MatchesExpression(expression, input++);
-						} while ((!ret) && *input);
-					// ...until we find a match or we run out of input.
-				// Match if the input is an empty string
-					}else{
-						ret = true;
-					}
-			// If expression was only "*", match any string
+				ret = MatchesExpression(expression + 1, input);
+				break;
+		// Expression has something else after asterisk
+			default:
+			// Go to the rest of the expression
+				expression++;
+			// If the input is not an empty string...
+				if (*input){
+					do {
+					// ...try the rest of the expression for each substring
+						ret = MatchesExpression(expression, input++);
+					} while ((!ret) && *input);
+				// ...until we find a match or we run out of input.
+			// Match if the input is an empty string
 				}else{
 					ret = true;
 				}
-				break;
-		// "Any char" wildcard
-			case '?':
-			// If there is a character, jump over it
-				if (*input){
-					ret = MatchesExpression(expression + 1, input + 1);
-				}
-				break;
-		// Expression has ended
-			case 0:
-			// Match if the string has ended
-				ret = ! *input;
-				break;
-		// First character isn't wildcard nor has the expression ended
-			default:
-			// If first characters are same, recurr
-				if (*expression == *input){
-					ret = MatchesExpression(expression + 1, input + 1);
-				}
+			}
+			break;
+	// "Any char" wildcard
+		case '?':
+		// If there is a character, jump over it
+			if (*input){
+				ret = MatchesExpression(expression + 1, input + 1);
+			}
+			break;
+	// First character isn't wildcard nor has the expression ended
+		default:
+		// If first character is same, recurr next
+			if (*expression == *input){
+				ret = MatchesExpression(expression + 1, input + 1);
+			}
 		}
 	}
 	return ret;
@@ -95,4 +101,4 @@ int main(int argc, char **argv){
 	return EXIT_SUCCESS;
 }
 
-#endif
+#endif	// EXPR_DEBUG
