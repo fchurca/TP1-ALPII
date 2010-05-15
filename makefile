@@ -1,4 +1,13 @@
 ####################################
+# TPI: main binary
+
+TPIV: main.cpp
+	c++ *.cpp -o $@ -DFSMODEL_VECTOR
+
+TPIL: main.cpp
+	c++ *.cpp -o $@ -DFSMODEL_LIST
+
+####################################
 # expr: expression matcher
 
 #	Make library
@@ -24,28 +33,28 @@ Dfsnode: fsnode.cpp
 # fsmodel: file system tree model; vector version
 
 #	Make library
-Vfsmodel: fsmodel.cpp fsnode.cpp
+Vfsmodel: fsmodel.cpp fsnode.cpp expr.cpp
 	c++ $? -c -DFSMODEL_VECTOR
 
 #	Make debug bin
-DVfsmodel: fsmodel.cpp fsnode.cpp
+DVfsmodel: fsmodel.cpp fsnode.cpp expr.cpp
 	c++ $? -g -o $@ -DFSMODEL_DEBUG -DFSMODEL_VECTOR
 
 ####################################
 # fsmodel: file system tree model; list version
 
 #	Make library
-Lfsmodel: fsmodel.cpp fsnode.cpp
+Lfsmodel: fsmodel.cpp fsnode.cpp expr.cpp
 	c++ $? -c -DFSMODEL_LIST
 
 #	Make debug bin
-DLfsmodel: fsmodel.cpp fsnode.cpp
+DLfsmodel: fsmodel.cpp fsnode.cpp expr.cpp
 	c++ $? -g -o $@ -DFSMODEL_DEBUG -DFSMODEL_LIST
 
 ####################################
 # clean: remove all binaries
 #	Add specific bin names here
 clean:
-	rm -f Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
+	rm -f TPIV TPIL Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
 
 .PHONY: clean

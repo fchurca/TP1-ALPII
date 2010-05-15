@@ -74,6 +74,22 @@ void FSNode::load(const std::string & path){
 	this->load(path.c_str());
 }
 
+//******************
+// dump(std::ostream&)
+//	Dump contents, to std::ostream out
+void FSNode::dump(std::ostream & out) const{
+	out
+		<< (this->isdir? "dir  " : "file ");
+	if (this->getisDirectory()){
+		out << this->size << " E";
+	}else{
+		out << humansize(this->size);
+	}
+	out
+		<< '\t' << this->getCmtime() << ' '
+		<< this->getfullname() << std::endl;
+}
+
 //**************************
 // Getters
 const std::string & FSNode::getname() const{
@@ -117,23 +133,8 @@ std::string humansize(size_t size){
 
 #ifdef FSNODE_DEBUG
 
-#include <ctime>
-
 #include <iostream>
 using namespace std;
-
-void FSNodeDump(FSNode & node){
-	std::cout
-		<< (node.getisDirectory()? "dir  " : "file ");
-	if (node.getisDirectory()){
-		std::cout << node.getsize() << " E";
-	}else{
-		std::cout << humansize(node.getsize());
-	}
-	std::cout
-		<< '\t' << node.getCmtime() << ' '
-		<< node.getfullname() << endl;
-}
 
 int main(int argc, char **argv){
 	int ret = EXIT_SUCCESS;
@@ -141,7 +142,7 @@ int main(int argc, char **argv){
 		for (size_t i = 1; i < argc; i++){
 			try{
 				FSNode node(argv[i]);
-				FSNodeDump(node);
+				node.dump(cout);
 			}catch(runtime_error e){
 				cerr << e.what() << endl;
 			}

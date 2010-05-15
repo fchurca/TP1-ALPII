@@ -1,4 +1,5 @@
 #include "fsmodel.h"
+#include "expr.h"
 
 #include <dirent.h>
 #include <cstring>
@@ -71,6 +72,7 @@ size_t FSModel::load(const std::string & path){
 					insertionpoint++;
 				}
 			// Insert at saved location
+				curnode.name = dp->d_name;
 				this->contents.insert(insertionpoint, curnode);
 			}
 		}
@@ -97,17 +99,32 @@ void FSModel::dump(std::ostream & out) const{
 		iterator != end;
 		iterator++
 	){
-		out
-			<< (iterator->isdir? "dir  " : "file ");
-		if (iterator->getisDirectory()){
-			out << iterator->size << " E";
-		}else{
-			out << humansize(iterator->size);
-		}
-		out
-			<< '\t' << iterator->getCmtime() << ' '
-			<< iterator->getfullname() << std::endl;
+		iterator->dump(out);
 	}
+}
+
+//******************
+// search(std::ostream &, const std::string &)
+//	Dump contents to std::ostream out, filtering local name by expression
+void FSModel::search(std::ostream & out, const std::string & expression) const{
+	out
+		<< "Contents of " << this->path << std::endl
+		<< "Total: " << this->size << " elements" << std::endl
+		<< "Type Size\tDate                     Name" << std::endl;
+	size_t found = 0;
+	for (
+		container::const_iterator
+			iterator = this->contents.begin(),
+			end = this->contents.end();
+		iterator != end;
+		iterator++
+	){
+		if (MatchesExpression(expression, iterator->getname())){
+			iterator->dump(out);
+			found++;
+		}
+	}
+	out << "Found: " << found << std::endl;
 }
 
 //**************************

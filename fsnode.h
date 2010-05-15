@@ -1,10 +1,12 @@
 #ifndef __FSNODE_H__
 #define __FSNODE_H__
 
+#include <sys/stat.h>
+
 #include <string>
 #include <cstdlib>
 
-#include <sys/stat.h>
+#include <ostream>
 
 //**************************************
 // humansize()
@@ -44,6 +46,11 @@ public:
 //	Wrap to cstring version
 //	May throw runtime_error if path is unreachable
 	void load(const std::string & path);
+
+//******************
+// dump(std::ostream&)
+//	Dump contents to std::ostream out
+	void dump(std::ostream & out) const;
 
 //**************************
 // Getters

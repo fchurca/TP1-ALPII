@@ -42,9 +42,14 @@ public:
 	size_t load(const std::string & path);
 
 //******************
-// dump(std::ostream&)
-//	Dump contents. unfiltered, to std::ostream out
+// dump(std::ostream &)
+//	Dump contents, unfiltered, to std::ostream out
 	void dump(std::ostream & out) const;
+
+//******************
+// search(std::ostream &, const std::string &)
+//	Dump contents to std::ostream out, filtering local name by expression
+	void search(std::ostream & out, const std::string & expression) const;
 
 //**************************
 // Getters
