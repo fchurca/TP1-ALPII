@@ -18,24 +18,22 @@ bool MatchesExpression(const char * expression, const char * input){
 			case '*':
 				if (*input){
 					expression++;
-				// Check only once if another '*' follows in the expression
-					if (expression[2] == '*'){
-						ret = MatchesExpression(expression, input);
-				// If next isn't '*'...
-					}else if (expression[1]){
+				// If there is something else to match
+					if (*expression){
 					// ...until we find a match or we run out of input...
 						while ((!ret) && *input){
 						// ...try the rest of the expression for each substring
 							ret = MatchesExpression(expression, input++);
 						}
-				// Match if the input is an empty string
+				// If expression was only "*", match any string
 					}else{
 						ret = true;
 					}
-					break;
+			// Match if the input is an empty string
 				}else{
 					ret = true;
 				}
+				break;
 		// "Any char" wildcard
 			case '?':
 			// If there is a character, jump over it
@@ -45,11 +43,12 @@ bool MatchesExpression(const char * expression, const char * input){
 				break;
 		// Expression has ended
 			case 0:
-			// If the string has ended, match
+			// Match if the string has ended
 				ret = ! *input;
 				break;
 		// First character isn't wildcard
 			default:
+// TODO: REPLACE WITH RECURSIVE CALL
 			// Length of expression to first of: end or first wildcard
 				size_t usefullen = strcspn(expression, "*?");
 			// Check if characters up to wildcard or end are same
