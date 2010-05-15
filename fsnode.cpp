@@ -87,7 +87,14 @@ void FSNode::dump(std::ostream & out) const{
 	}
 	out
 		<< '\t' << this->getCmtime() << ' '
-		<< this->getfullname() << std::endl;
+		<< this->getpath() << " " << this->getname() << std::endl;
+}
+
+//******************
+// compare(FSNode&)
+//	Determine which goes first in a list by path/type/name
+char FSNode::compare(FSNode & other){
+	return this->fullname.compare(other.fullname);
 }
 
 //**************************

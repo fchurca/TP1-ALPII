@@ -58,22 +58,24 @@ size_t FSModel::load(const std::string & path){
 			if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
 				localsize++;
 				this->size++;
-			// Prepare to insert at end
-				container::iterator insertionpoint = this->contents.end();
 				if (curnode.isdir){
-/* The iterator will be pointing to the end of the container. We will need to
-*	skip back and forth in order not to surf to the end as new elements arrive.
-*/
-					insertionpoint--;
 				// Load directory's children.
 					// And its children's children.
 						// And its children's children's children...
 					localsize += curnode.size = this->load(curnode.fullname);
-					insertionpoint++;
 				}
-			// Insert at saved location
 				curnode.name = dp->d_name;
-				this->contents.insert(insertionpoint, curnode);
+// Ordered insertion (move to container class?)
+				container::iterator
+					inpoint,
+					begin = this->contents.begin(),
+					end = this->contents.end();
+				for(inpoint = this->contents.begin(); inpoint < end; inpoint++){
+					if (curnode.compare(*inpoint) < 0){
+						break;
+					}
+				}
+				this->contents.insert(inpoint, curnode);
 			}
 		}
 		closedir(dirp);

@@ -52,6 +52,11 @@ public:
 //	Dump contents to std::ostream out
 	void dump(std::ostream & out) const;
 
+//******************
+// compare(FSNode&)
+//	Determine which goes first in a list by path/type/name
+	char compare(FSNode & other);
+
 //**************************
 // Getters
 
