@@ -2,34 +2,37 @@
 
 #include <cstring>
 
-/***************************************
-* MatchesExpression()
-*	Checks if the cstring input matches the search expression cstring expression
-*	Supported wildcards:
-*		'*'	: any string
-*		'?'	: any char
-***************************************/
+//**************************************
+// MatchesExpression()
+//	Checks if the input matches the search expression
+//	Supported wildcards:
+//		'*'	: any string
+//		'?'	: any char
 bool MatchesExpression(const char * expression, const char * input){
+// Assume mismatch
 	bool ret = false;
-// If none is NULL go on
+// If none is NULL go on. If any or both are NULL, leave mismatch.
 	if (expression && input){
+	// According to first character of expression:
 		switch (*expression){
 		// "Any string" wildcard
 			case '*':
-				if (*input){
+			// If there is something else to match
+				if (expression[1]){
+				// Go to the rest of the expression
 					expression++;
-				// If there is something else to match
-					if (*expression){
-					// ...until we find a match or we run out of input...
-						while ((!ret) && *input){
+				// If the input is not an empty string...
+					if (*input){
+						do {
 						// ...try the rest of the expression for each substring
 							ret = MatchesExpression(expression, input++);
-						}
-				// If expression was only "*", match any string
+						} while ((!ret) && *input);
+					// ...until we find a match or we run out of input.
+				// Match if the input is an empty string
 					}else{
 						ret = true;
 					}
-			// Match if the input is an empty string
+			// If expression was only "*", match any string
 				}else{
 					ret = true;
 				}
@@ -46,20 +49,13 @@ bool MatchesExpression(const char * expression, const char * input){
 			// Match if the string has ended
 				ret = ! *input;
 				break;
-		// First character isn't wildcard
+		// First character isn't wildcard nor has the expression ended
 			default:
-// TODO: REPLACE WITH RECURSIVE CALL
-			// Length of expression to first of: end or first wildcard
-				size_t usefullen = strcspn(expression, "*?");
-			// Check if characters up to wildcard or end are same
-				if (ret = ! strncmp(expression, input, usefullen)){
-				// In that case, continue checking from there on
-					ret = MatchesExpression(expression + usefullen, input + usefullen);
+			// If first characters are same, recurr
+				if (*expression == *input){
+					ret = MatchesExpression(expression + 1, input + 1);
 				}
 		}
-// If both are NULL, match. Else, leave ret = false from init and abort.
-	}else if (expression == input){
-		ret = true;
 	}
 	return ret;
 }

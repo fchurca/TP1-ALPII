@@ -70,7 +70,7 @@ size_t FSModel::load(const std::string & path){
 					inpoint,
 					begin = this->contents.begin(),
 					end = this->contents.end();
-				for(inpoint = this->contents.begin(); inpoint < end; inpoint++){
+				for(inpoint = this->contents.begin(); inpoint != end; inpoint++){
 					if (curnode.compare(*inpoint) < 0){
 						break;
 					}

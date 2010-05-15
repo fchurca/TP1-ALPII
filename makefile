@@ -1,11 +1,11 @@
 ####################################
 # TPI: main binary
 
-TPIV: main.cpp
-	c++ *.cpp -o $@ -DFSMODEL_VECTOR
+TPIV: main.cpp expr.cpp fsmodel.cpp fsnode.cpp
+	c++ $? -o $@ -DFSMODEL_VECTOR
 
-TPIL: main.cpp
-	c++ *.cpp -o $@ -DFSMODEL_LIST
+TPIL: main.cpp expr.cpp fsmodel.cpp fsnode.cpp
+	c++ $? -o $@ -DFSMODEL_LIST
 
 ####################################
 # expr: expression matcher
