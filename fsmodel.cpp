@@ -121,7 +121,7 @@ void FSModel::search(
 /* maxsize is unsigned. Assigning -1 to it will pump it to the maximum possible
 *	unsigned value
 */
-	size_t maxsize = -1, size_t minsize = 0
+	size_t maxsize, size_t minsize
 ) const{
 	out
 		<< "Contents of " << this->path << std::endl

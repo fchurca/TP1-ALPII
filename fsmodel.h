@@ -63,7 +63,7 @@ public:
 //	With no size parameters, will not evaluate size
 	void search(
 		std::ostream & out, const std::string & expression,
-		size_t maxsize, size_t minsize
+		size_t maxsize = -1, size_t minsize = 0
 	) const;
 
 //**************************
