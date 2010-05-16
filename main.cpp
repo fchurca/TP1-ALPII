@@ -1,6 +1,7 @@
-#include <cstdlib>
-
 #include "fsmodel.h"
+
+#include <cstdlib>
+#include <cstring>
 
 #include <stdexcept>
 #include <iostream>
@@ -9,10 +10,13 @@ using namespace std;
 
 int main(int argc, char **argv){
 	int ret = EXIT_SUCCESS;
-	if (argc > 1){
-		try{
+	if (argc > 2){
+		if (strcmp(argv[1], "-d")){
+			cerr << "Expected \"-d\" as first parameter" << endl;
+			ret = EXIT_FAILURE;
+		}else try{
 			FSModel mymodel;
-			mymodel.load(argv[1]);
+			mymodel.load(argv[2]);
 			mymodel.dump(cout);
 			for(
 				string expression;
@@ -31,7 +35,7 @@ int main(int argc, char **argv){
 			ret = EXIT_FAILURE;
 		}
 	}else{
-		cout << "Usage:\t" << argv[0] << " <path>" << endl;
+		cout << "Usage:\t" << argv[0] << " -d <path>" << endl;
 	}
 	return ret;
 }
