@@ -111,8 +111,18 @@ void FSModel::clear(){
 
 //******************
 // search(std::ostream &, const std::string &)
-//	Dump contents to std::ostream out, filtering local name by expression
-void FSModel::search(std::ostream & out, const std::string & expression) const{
+//	Dump contents to std::ostream out
+//		Filters local name by expression
+//		Filters size by max and min
+//	With one size parameter, will assume minsize = 0 and only evaluate maxsize
+//	With no size parameters, will assume maxsize = 1 and not evaluate size
+void FSModel::search(
+	std::ostream & out, const std::string & expression,
+/* maxsize is unsigned. Assigning -1 to it will pump it to the maximum possible
+*	unsigned value
+*/
+	size_t maxsize = -1, size_t minsize = 0
+) const{
 	out
 		<< "Contents of " << this->path << std::endl
 		<< "Total: " << this->getsize() << " elements" << std::endl
@@ -125,7 +135,17 @@ void FSModel::search(std::ostream & out, const std::string & expression) const{
 		it != end;
 		it++
 	){
-		if (MatchesExpression(expression, it->getname())){
+		if (
+		// Should match expression
+			MatchesExpression(expression, it->getname()) && (
+			// Match all dirs
+				it->getisDirectory() || (
+				// Files should have a size between, and including, min and max
+					(it->getsize() <= maxsize) ||
+					(it->getsize() >= minsize)
+				)
+			)
+		){
 			it->dump(out);
 			found++;
 		}

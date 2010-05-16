@@ -54,7 +54,7 @@ public:
 //******************
 // search(std::ostream &, const std::string &)
 //	Dump contents to std::ostream out, filtering local name by expression
-	void search(std::ostream & out, const std::string & expression) const;
+	void search(std::ostream & out, const std::string & expression, size_t maxsize, size_t minsize) const;
 
 //**************************
 // Getters
