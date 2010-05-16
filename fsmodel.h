@@ -1,13 +1,17 @@
-#if defined(FSMODEL_LIST) && defined(FSMODEL_VECTOR)
-#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
-#endif
-
 #ifndef __FSMODEL_H__
 #define __FSMODEL_H__
+
+#if defined(FSMODEL_LIST) && defined(FSMODEL_VECTOR)
+	#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
+#else
 
 #include "fsnode.h"
 
 #include <ostream>
+
+#if ! (defined(FSMODEL_LIST) || defined(FSMODEL_VECTOR))
+	#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
+#else
 
 #if defined(FSMODEL_VECTOR)
 	#include <vector>
@@ -16,7 +20,6 @@
 	#include <list>
 	typedef std::list<FSNode> container;
 #endif
-#if defined(FSMODEL_LIST) || defined(FSMODEL_VECTOR)
 
 class FSModel{
 public:
@@ -53,8 +56,15 @@ public:
 
 //******************
 // search(std::ostream &, const std::string &)
-//	Dump contents to std::ostream out, filtering local name by expression
-	void search(std::ostream & out, const std::string & expression, size_t maxsize, size_t minsize) const;
+//	Dump contents to std::ostream out
+//		Filters local name by expression
+//		Filters size by max and min
+//	With one size parameter, will only evaluate maxsize
+//	With no size parameters, will not evaluate size
+	void search(
+		std::ostream & out, const std::string & expression,
+		size_t maxsize, size_t minsize
+	) const;
 
 //**************************
 // Getters
@@ -66,8 +76,9 @@ protected:
 	container contents;
 	std::string path;
 };
-#else
-#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
-#endif
 
-#endif
+#endif	// ! (defined(FSMODEL_LIST) || defined(FSMODEL_VECTOR))
+
+#endif	// defined(FSMODEL_LIST) && defined(FSMODEL_VECTOR)
+
+#endif	// __FSMODEL_H__

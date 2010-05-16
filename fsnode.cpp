@@ -81,7 +81,7 @@ void FSNode::dump(std::ostream & out) const{
 	out
 		<< (this->isdir? "dir  " : "file ");
 	if (this->getisDirectory()){
-		out << this->size << " E";
+		out << this->size << " #";
 	}else{
 		out << humansize(this->size);
 	}
@@ -133,7 +133,7 @@ std::string humansize(size_t size){
 	}
 	ss << size << ' ' << pows[scale - 1];
 	if (scale > 1){
-		ss << 'i';
+		ss << "iB";
 	}
 	return ss.str();
 }

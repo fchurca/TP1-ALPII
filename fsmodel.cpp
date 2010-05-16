@@ -115,7 +115,7 @@ void FSModel::clear(){
 //		Filters local name by expression
 //		Filters size by max and min
 //	With one size parameter, will assume minsize = 0 and only evaluate maxsize
-//	With no size parameters, will assume maxsize = 1 and not evaluate size
+//	With no size parameters, will assume maxsize = -1 and not evaluate size
 void FSModel::search(
 	std::ostream & out, const std::string & expression,
 /* maxsize is unsigned. Assigning -1 to it will pump it to the maximum possible
