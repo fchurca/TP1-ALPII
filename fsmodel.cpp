@@ -13,15 +13,12 @@
 // FSModel()
 //	Empty default constructor
 FSModel::FSModel(){
-	this->size = 0;
 }
 
 //******************
 // FSModel(const std::string & path)
-//	Set path and load tree
+//	Load tree
 FSModel::FSModel(const std::string & path){
-	this->size = 0;
-	this->path = path;
 	this->load(path);
 }
 
@@ -30,34 +27,32 @@ FSModel::FSModel(const std::string & path){
 //	Load tree
 //	Returns amount of nodes loaded
 size_t FSModel::load(const std::string & path){
-// Will return sub(all)elements
+// Will return amount of sub(all)elements
 	size_t localsize = 0;
 	FSNode curnode;
 
-	if (!path.length()){
-		throw std::runtime_error("Empty dirname");
-	}
-
 /* Set node path and add slash if missing. If on Microsoft Windows, the slash
-*	is mandatory too, since we are using a POSIX environment in the first
-*	place (Interix / SUA / GNUWin / Xming / Cygwin / MinGW)
+*	is mandatory too, since we are using a POSIX environment in the first place
+*	(Interix / SUA / GNUWin / Xming / Cygwin / MinGW)
 */	
 	curnode.path = path;
 	if (path[path.length()-1] != '/'){
 		curnode.path.push_back('/');
 	}
-
+// Check valid dir
 	if (DIR * dirp = opendir(path.c_str())){
-		struct dirent *dp;
+	// If model was already loaded, clear it
+		if (this->path.length()){
+			this->clear();
+		}
+		struct dirent *dp = NULL;
 		while (dp = readdir(dirp)){
 		// Load stats, name
 			curnode.name = dp->d_name;
-			curnode.fullname = curnode.path + curnode.name;
-			curnode.load(curnode.fullname);
+			curnode.load(curnode.path + curnode.name);
 		// Ignore self, parent
 			if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
 				localsize++;
-				this->size++;
 				if (curnode.isdir){
 				// Load directory's children.
 					// And its children's children.
@@ -65,15 +60,16 @@ size_t FSModel::load(const std::string & path){
 					localsize += curnode.size = this->load(curnode.fullname);
 				}
 				curnode.name = dp->d_name;
-// Ordered insertion (move to container class?)
+		// Ordered insertion
 				container::iterator
-					inpoint,
 					begin = this->contents.begin(),
-					end = this->contents.end();
-				for(inpoint = this->contents.begin(); inpoint != end; inpoint++){
+					end = this->contents.end(),
+					inpoint = begin;
+				while(inpoint != end){
 					if (curnode.compare(*inpoint) < 0){
 						break;
 					}
+					inpoint++;
 				}
 				this->contents.insert(inpoint, curnode);
 			}
@@ -92,17 +88,25 @@ size_t FSModel::load(const std::string & path){
 void FSModel::dump(std::ostream & out) const{
 	out
 		<< "Contents of " << this->path << std::endl
-		<< "Total: " << this->size << " elements" << std::endl
+		<< "Total: " << this->getsize() << " elements" << std::endl
 		<< "Type Size\tDate                     Name" << std::endl;
 	for (
 		container::const_iterator
-			iterator = this->contents.begin(),
+			it = this->contents.begin(),
 			end = this->contents.end();
-		iterator != end;
-		iterator++
+		it != end;
+		it++
 	){
-		iterator->dump(out);
+		it->dump(out);
 	}
+}
+
+//******************
+// clear()
+//	Clear tree and path
+void FSModel::clear(){
+	this->path = "";
+	this->contents.clear();
 }
 
 //******************
@@ -111,18 +115,18 @@ void FSModel::dump(std::ostream & out) const{
 void FSModel::search(std::ostream & out, const std::string & expression) const{
 	out
 		<< "Contents of " << this->path << std::endl
-		<< "Total: " << this->size << " elements" << std::endl
+		<< "Total: " << this->getsize() << " elements" << std::endl
 		<< "Type Size\tDate                     Name" << std::endl;
 	size_t found = 0;
 	for (
 		container::const_iterator
-			iterator = this->contents.begin(),
+			it = this->contents.begin(),
 			end = this->contents.end();
-		iterator != end;
-		iterator++
+		it != end;
+		it++
 	){
-		if (MatchesExpression(expression, iterator->getname())){
-			iterator->dump(out);
+		if (MatchesExpression(expression, it->getname())){
+			it->dump(out);
 			found++;
 		}
 	}
@@ -138,7 +142,7 @@ const std::string & FSModel::getpath() const{
 	return this->path;
 }
 size_t FSModel::getsize() const{
-	return this->size;
+	return this->contents.size();
 }
 
 #ifdef FSMODEL_DEBUG

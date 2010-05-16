@@ -42,6 +42,11 @@ public:
 	size_t load(const std::string & path);
 
 //******************
+// clear()
+//	Clear tree and path
+	void clear();
+
+//******************
 // dump(std::ostream &)
 //	Dump contents, unfiltered, to std::ostream out
 	void dump(std::ostream & out) const;
@@ -60,7 +65,6 @@ public:
 protected:
 	container contents;
 	std::string path;
-	size_t size;
 };
 #else
 #error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
