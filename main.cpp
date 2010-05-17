@@ -33,7 +33,12 @@ with EOF (control-D (*NIX) / control-Z (Windows/DOS))"
 				cout << "Enter a search expression:" << endl;
 				getline(cin, expression);
 				if (cin){
+					cron.iniciar();
 					mymodel.search(cout, expression);
+					cron.parar();
+					cout
+						<< "Search completed in "
+						<< cron.getTiempoTranscurrido() << " msec" << endl;
 				}
 			}
 		}catch(std::runtime_error e){
