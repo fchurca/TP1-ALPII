@@ -87,7 +87,7 @@ void FSNode::dump(std::ostream & out) const{
 	}
 	out
 		<< '\t' << this->getCmtime() << ' '
-		<< this->getpath() << " " << this->getname() << std::endl;
+		<< this->fullname << std::endl;
 }
 
 //******************
