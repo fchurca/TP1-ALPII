@@ -1,4 +1,7 @@
 #include "fsmodel.h"
+#include "Cronometro.h"
+
+#include <ctime>
 
 #include <cstdlib>
 #include <cstring>
@@ -16,14 +19,22 @@ int main(int argc, char **argv){
 			ret = EXIT_FAILURE;
 		}else try{
 			FSModel mymodel;
+			Cronometro cron;
 			mymodel.load(argv[2]);
+			cron.parar();
 			mymodel.dump(cout);
-			for(
+			cout
+				<< "Load finished: " << cron.getTiempoTranscurrido() << " msec" << endl
+				<< "Program terminates \
+with EOF (control-D (*NIX) / control-Z (Windows/DOS))"
+				<< endl;
+			while (cin){
 				string expression;
-				cin;
-				mymodel.search(cout, expression)
-			){
+				cout << "Enter a search expression:" << endl;
 				getline(cin, expression);
+				if (cin){
+					mymodel.search(cout, expression);
+				}
 			}
 		}catch(std::runtime_error e){
 			cerr << e.what() << endl << "Aborting" << endl;
@@ -35,7 +46,9 @@ int main(int argc, char **argv){
 			ret = EXIT_FAILURE;
 		}
 	}else{
-		cout << "Usage:\t" << argv[0] << " -d <path>" << endl;
+		cout
+			<< "Usage:\t" << argv[0] << " -d <path>" << endl;
+		;
 	}
 	return ret;
 }
