@@ -19,8 +19,8 @@
 	#include "vector.h"
 	typedef custom::vector<FSNode> container;
 #elif defined(FSMODEL_LIST)
-	#include <list>
-	typedef std::list<FSNode> container;
+	#include "list.h"
+	typedef custom::list<FSNode> container;
 #endif
 
 class FSModel{
