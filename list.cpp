@@ -7,6 +7,14 @@
 
 namespace custom{
 
+	template <class T> list<T>::node::node(){
+		this->next = NULL;
+	}
+	template <class T> list<T>::node::node(const T & data, node * next){
+		this->data = data;
+		this->next = next;
+	}
+
 	template <class T> list<T>::list(){
 		this->first = this->last = NULL;
 		this->Size = 0;
@@ -59,10 +67,17 @@ int main(int argc, char **argv){
 	custom::list<int> mylist;
 	std::cout << mylist.size() << std::endl;
 	mylist.push_back(43);
-	std::cout << mylist.size() << std::endl;
 	mylist.push_back(44);
 	mylist.push_back(45);
-	std::cout << mylist.pop_front() << std::endl;
+	{
+		custom::list<int>::iterator
+			it = mylist.begin(),
+			end = mylist.end();
+		while(it != end){
+			std::cout << *it << std::endl;
+			it++;
+		}
+	}
 	std::cout << mylist.size() << std::endl;
 	return EXIT_SUCCESS;
 }

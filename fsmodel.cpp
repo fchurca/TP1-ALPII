@@ -62,9 +62,8 @@ size_t FSModel::load(const std::string & path){
 				curnode.name = dp->d_name;
 		// Ordered insertion
 				container::iterator
-					begin = this->contents.begin(),
-					end = this->contents.end(),
-					inpoint = begin;
+					inpoint = this->contents.begin(),
+					end = this->contents.end();
 				while(inpoint != end){
 					if (curnode.compare(*inpoint) < 0){
 						break;
@@ -139,7 +138,7 @@ void FSModel::search(
 		// Should match expression
 			MatchesExpression(expression, (*it).getname()) && (
 			// Match all dirs
-				(*it).getisDirectory() || (
+				it->getisDirectory() || (
 				// Files should have a size between, and including, min and max
 					(it->getsize() <= maxsize) ||
 					(it->getsize() >= minsize)

@@ -22,7 +22,11 @@ namespace custom{
 			iterator(const iterator & newit);
 			T & operator*();
 			T * operator->(){
-				return &(this->parent->at(pos));
+				if(this->initialized){
+					return &(this->parent->at(pos));
+				}else{
+					throw std::runtime_error("Iterator not initialized");
+				}
 			}
 			bool operator!=(const iterator & newit){
 				return ! ((*this) == newit);
@@ -30,14 +34,13 @@ namespace custom{
 			bool operator==(const iterator & newit){
 				if (!(this->initialized || newit.initialized)){
 					throw std::runtime_error("Iterator not initialized");
-				}
-				if (this->parent != newit.parent){
+				}else if (this->parent != newit.parent){
 					throw std::runtime_error("Different iterator parents");
-				}
-				if (this->at_end && newit.at_end){
+				}else if (this->at_end && newit.at_end){
 					return true;
+				}else{
+					return this->pos == newit.pos;
 				}
-				return this->pos == newit.pos;
 			}
 			void operator++();
 			void operator++(int){
