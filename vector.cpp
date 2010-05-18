@@ -42,6 +42,19 @@ template <class T> T vector<T>::pop_back(){
 		throw std::runtime_error("Nothing to pop");
 	}
 }
+template <class T>
+	void vector<T>::insert(const vector<T>::iterator & it, const T & data){
+	if (it.pos > this->Size){
+		throw std::runtime_error("Outside bonds");
+	}else{
+		this->push_back(data);
+		for(size_t i = this->Size - 1; i > it.pos; i--){
+			T aux = this->at(i);
+			this->at(i) = this->at(i-1);
+			this->at(i-1) = aux;
+		}
+	}
+}
 template <class T> void vector<T>::change_capacity(size_t capacity){
 	if (this->capacity > capacity){
 		throw std::runtime_error("New capacity smaller than old");

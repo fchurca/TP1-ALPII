@@ -97,7 +97,7 @@ void FSModel::dump(std::ostream & out){
 		it != end;
 		it++
 	){
-		(*it).dump(out);
+		it->dump(out);
 	}
 }
 
@@ -141,12 +141,12 @@ void FSModel::search(
 			// Match all dirs
 				(*it).getisDirectory() || (
 				// Files should have a size between, and including, min and max
-					((*it).getsize() <= maxsize) ||
-					((*it).getsize() >= minsize)
+					(it->getsize() <= maxsize) ||
+					(it->getsize() >= minsize)
 				)
 			)
 		){
-			(*it).dump(out);
+			it->dump(out);
 			found++;
 		}
 	}

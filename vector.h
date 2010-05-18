@@ -21,7 +21,7 @@ namespace custom{
 			iterator();
 			iterator(const iterator & newit);
 			T & operator*();
-			T * operator()(){
+			T * operator->(){
 				return &(this->parent->at(pos));
 			}
 			bool operator!=(const iterator & newit){
@@ -68,6 +68,7 @@ namespace custom{
 		void clear();
 		void push_back(const T & data);
 		T pop_back();
+		void insert(const iterator & it, const T & data);
 		void change_capacity(size_t capacity);
 	};
 }
