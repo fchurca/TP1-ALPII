@@ -57,6 +57,24 @@ public:
 //	Determine which goes first in a list by path/type/name
 	char compare(FSNode & other);
 
+//******************
+// operator<(FSNode&)
+	bool operator<(FSNode & other){
+		return this->compare(other) < 0;
+	}
+
+//******************
+// operator>(FSNode&)
+	bool operator>(FSNode & other){
+		return this->compare(other) > 0;
+	}
+
+//******************
+// operator==(FSNode&)
+	bool operator==(FSNode & other){
+		return !(this->compare(other));
+	}
+
 //**************************
 // Getters
 

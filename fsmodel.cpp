@@ -85,19 +85,19 @@ size_t FSModel::load(const std::string & path){
 //******************
 // dump(std::ostream&)
 //	Dump contents, unfiltered, to std::ostream out
-void FSModel::dump(std::ostream & out) const{
+void FSModel::dump(std::ostream & out){
 	out
 		<< "Contents of " << this->path << std::endl
 		<< "Total: " << this->getsize() << " elements" << std::endl
 		<< "Type Size\tDate                     Name" << std::endl;
 	for (
-		container::const_iterator
+		container::iterator
 			it = this->contents.begin(),
 			end = this->contents.end();
 		it != end;
 		it++
 	){
-		it->dump(out);
+		(*it).dump(out);
 	}
 }
 
@@ -122,14 +122,14 @@ void FSModel::search(
 *	unsigned value
 */
 	size_t maxsize, size_t minsize
-) const{
+){
 	out
 		<< "Contents of " << this->path << std::endl
 		<< "Total: " << this->getsize() << " elements" << std::endl
 		<< "Type Size\tDate                     Name" << std::endl;
 	size_t found = 0;
 	for (
-		container::const_iterator
+		container::iterator
 			it = this->contents.begin(),
 			end = this->contents.end();
 		it != end;
@@ -137,16 +137,16 @@ void FSModel::search(
 	){
 		if (
 		// Should match expression
-			MatchesExpression(expression, it->getname()) && (
+			MatchesExpression(expression, (*it).getname()) && (
 			// Match all dirs
-				it->getisDirectory() || (
+				(*it).getisDirectory() || (
 				// Files should have a size between, and including, min and max
-					(it->getsize() <= maxsize) ||
-					(it->getsize() >= minsize)
+					((*it).getsize() <= maxsize) ||
+					((*it).getsize() >= minsize)
 				)
 			)
 		){
-			it->dump(out);
+			(*it).dump(out);
 			found++;
 		}
 	}

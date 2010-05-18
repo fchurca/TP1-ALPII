@@ -14,8 +14,10 @@
 #else
 
 #if defined(FSMODEL_VECTOR)
-	#include <vector>
-	typedef std::vector<FSNode> container;
+//	#include <vector>
+//	typedef std::vector<FSNode> container;
+	#include "vector.h"
+	typedef custom::vector<FSNode> container;
 #elif defined(FSMODEL_LIST)
 	#include <list>
 	typedef std::list<FSNode> container;
@@ -52,7 +54,7 @@ public:
 //******************
 // dump(std::ostream &)
 //	Dump contents, unfiltered, to std::ostream out
-	void dump(std::ostream & out) const;
+	void dump(std::ostream & out);
 
 //******************
 // search(std::ostream &, const std::string &)
@@ -64,7 +66,7 @@ public:
 	void search(
 		std::ostream & out, const std::string & expression,
 		size_t maxsize = -1, size_t minsize = 0
-	) const;
+	);
 
 //**************************
 // Getters
