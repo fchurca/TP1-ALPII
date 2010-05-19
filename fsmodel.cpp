@@ -97,7 +97,7 @@ void FSModel::dump(std::ostream & out){
 	){
 		it->dump(out);
 	}
-	out << << "Total: " << this->getsize() << " elements" << std::endl
+	out << "Total: " << this->getsize() << " elements" << std::endl;
 }
 
 //******************
