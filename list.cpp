@@ -6,13 +6,51 @@
 #include <stdexcept>
 
 namespace custom{
-
-	template <class T> list<T>::node::node(){
-		this->next = NULL;
+//**************************************
+// list::iterator methods
+//******************
+// list::iterator::operator*()
+//	Indirection
+	template <class T>
+	T & list<T>::iterator::operator*(){
+		if(this->initialized){
+			return pos->data;
+		}else{
+			throw std::runtime_error("Iterator not initialized");
+		}
 	}
-	template <class T> list<T>::node::node(const T & data, node * next){
-		this->data = data;
-		this->next = next;
+//******************
+// list::iterator::operator->()
+//	Member by indirection
+	template <class T>
+	T * list<T>::iterator::operator->(){
+		if(this->initialized){
+			return &(pos->data);
+		}else{
+			throw std::runtime_error("Iterator not initialized");
+		}
+	}
+//******************
+// list::iterator::operator!=(const iterator &)
+//	Not equal to
+	template <class T>
+	bool list<T>::iterator::operator!=(const list<T>::iterator & newit){
+		return ! ((*this) == newit);
+	}
+//******************
+// list::iterator::operator==(const iterator &)
+//	Equal to
+	template <class T>
+	bool list<T>::iterator::operator==(const list<T>::iterator & newit){
+		if (!(this->initialized || newit.initialized)){
+			throw std::runtime_error("Iterator not initialized");
+		}else if (this->parent != newit.parent){
+			throw std::runtime_error("Different iterator parents");
+		}else if (this->at_end && newit.at_end){
+			return true;
+		}else{
+			return this->pos == newit.pos;
+		}
 	}
 
 	template <class T> list<T>::list(){
@@ -58,30 +96,5 @@ namespace custom{
 	}
 
 }
-
-#ifdef LIST_DEBUG
-
-#include <iostream>
-
-int main(int argc, char **argv){
-	custom::list<int> mylist;
-	std::cout << mylist.size() << std::endl;
-	mylist.push_back(43);
-	mylist.push_back(44);
-	mylist.push_back(45);
-	{
-		custom::list<int>::iterator
-			it = mylist.begin(),
-			end = mylist.end();
-		while(it != end){
-			std::cout << *it << std::endl;
-			it++;
-		}
-	}
-	std::cout << mylist.size() << std::endl;
-	return EXIT_SUCCESS;
-}
-
-#endif	//	LIST_DEBUG
 
 #endif	//	__LIST_CPP__
