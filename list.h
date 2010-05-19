@@ -300,7 +300,7 @@ namespace custom{
 	//		* Incrementa el tamaño en un elemento más
 		void push_back(const T & data){
 			node * to_add = new node(data, NULL);
-			if (this->last){
+			if (this->Size){
 				this->last->next = to_add;
 			}else{
 				this->first = to_add;
@@ -322,6 +322,9 @@ namespace custom{
 				this->first = this->first->next;
 				delete aux;
 				this->Size--;
+				if (!this->Size){
+					this->last = NULL;
+				}
 				return ret;
 			}else{
 				throw std::runtime_error("Nothing to pop");
@@ -368,13 +371,13 @@ namespace custom{
 				throw std::runtime_error("Iterator not initialized");
 			}else if (it.parent != this){
 				throw std::runtime_error("Wrong iterator parent");
-			}else if (it.at_end || ! this->last){
+			}else if (it.at_end || ! this->Size){
 				push_back(data);
 			}else if (it.pos == this->first){
 				this->Size++;
 				node * to_add = new node(data, this->first);
 				this->first = to_add;
-				if (! this->last){
+				if (! this->Size){
 					this->last = to_add;
 				}
 			}else{
