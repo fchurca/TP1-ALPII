@@ -19,6 +19,8 @@
 	#include "vector.h"
 	typedef custom::vector<FSNode> container;
 #elif defined(FSMODEL_LIST)
+//	#include <list>
+//	typedef std::list<FSNode> container;
 	#include "list.h"
 	typedef custom::list<FSNode> container;
 #endif
@@ -44,7 +46,7 @@ public:
 //	Load tree
 //	May throw runtime_error if path is unreachable
 //	Returns amount of nodes loaded
-	size_t load(const std::string & path);
+	unsigned long load(const std::string & path);
 
 //******************
 // clear()
@@ -65,14 +67,14 @@ public:
 //	With no size parameters, will not evaluate size
 	void search(
 		std::ostream & out, const std::string & expression,
-		size_t maxsize = -1, size_t minsize = 0
+		unsigned long maxsize = -1, unsigned long minsize = 0
 	);
 
 //**************************
 // Getters
 	const container & getcontents() const;
 	const std::string & getpath() const;
-	size_t getsize() const;
+	unsigned long getsize() const;
 
 protected:
 	container contents;

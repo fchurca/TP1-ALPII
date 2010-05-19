@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <cstring>
 
+#include <iostream>
+
 #include <stdexcept>
 
 //**************************************
@@ -26,9 +28,9 @@ FSModel::FSModel(const std::string & path){
 // load(const std::string &)
 //	Load tree
 //	Returns amount of nodes loaded
-size_t FSModel::load(const std::string & path){
+unsigned long FSModel::load(const std::string & path){
 // Will return amount of sub(all)elements
-	size_t localsize = 0;
+	unsigned long localsize = 0;
 	FSNode curnode;
 
 /* Set node path and add slash if missing. If on Microsoft Windows, the slash
@@ -36,41 +38,43 @@ size_t FSModel::load(const std::string & path){
 *	(Interix / SUA / GNUWin / Xming / Cygwin / MinGW)
 */	
 	curnode.path = path;
-	if (path[path.length()-1] != '/'){
+	if (path[path.length() - 1] != '/'){
 		curnode.path.push_back('/');
 	}
 // Check valid dir
 	if (DIR * dirp = opendir(path.c_str())){
-	// If model was already loaded, clear it
-		if (this->path.length()){
-			this->clear();
-		}
 		struct dirent *dp = NULL;
 		while (dp = readdir(dirp)){
 		// Load stats, name
 			curnode.name = dp->d_name;
 			curnode.load(curnode.path + curnode.name);
 		// Ignore self, parent
-			if (strcmp(dp->d_name, ".") && strcmp(dp->d_name, "..")){
-				localsize++;
-				if (curnode.isdir){
-				// Load directory's children.
-					// And its children's children.
-						// And its children's children's children...
+			if (
+				(curnode.getname() != ".") &&
+				(curnode.getname() !=  "..") &&
+				(curnode.getname() != "./") &&
+				(curnode.getname() !=  "../")
+			){
+			// If node is a dir, load children
+				if (curnode.getisDirectory()){
 					localsize += curnode.size = this->load(curnode.fullname);
 				}
-				curnode.name = dp->d_name;
+			// Load node
 		// Ordered insertion
-				container::iterator
-					inpoint = this->contents.begin(),
-					end = this->contents.end();
-				while(inpoint != end){
+				container::iterator inpoint = this->contents.begin();
+				for(
+					container::iterator end = this->contents.end();
+					inpoint != end;
+					inpoint++
+				){
 					if (curnode.compare(*inpoint) < 0){
 						break;
 					}
-					inpoint++;
 				}
 				this->contents.insert(inpoint, curnode);
+
+				std::cout << curnode.getfullname() << std::endl;
+				localsize++;
 			}
 		}
 		closedir(dirp);
@@ -120,13 +124,13 @@ void FSModel::search(
 /* maxsize is unsigned. Assigning -1 to it will pump it to the maximum possible
 *	unsigned value
 */
-	size_t maxsize, size_t minsize
+	unsigned long maxsize, unsigned long minsize
 ){
 	out
 		<< "Contents of " << this->path << std::endl
 		<< "Total: " << this->getsize() << " elements" << std::endl
 		<< "Type Size\tDate                     Name" << std::endl;
-	size_t found = 0;
+	unsigned long found = 0;
 	for (
 		container::iterator
 			it = this->contents.begin(),
@@ -136,7 +140,7 @@ void FSModel::search(
 	){
 		if (
 		// Should match expression
-			MatchesExpression(expression, (*it).getname()) && (
+			MatchesExpression(expression, it->getname()) && (
 			// Match all dirs
 				it->getisDirectory() || (
 				// Files should have a size between, and including, min and max
@@ -160,7 +164,7 @@ const container & FSModel::getcontents() const{
 const std::string & FSModel::getpath() const{
 	return this->path;
 }
-size_t FSModel::getsize() const{
+unsigned long FSModel::getsize() const{
 	return this->contents.size();
 }
 
