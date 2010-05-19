@@ -4,8 +4,6 @@
 #include <dirent.h>
 #include <cstring>
 
-#include <iostream>
-
 #include <stdexcept>
 
 //**************************************
@@ -72,8 +70,6 @@ unsigned long FSModel::load(const std::string & path){
 					}
 				}
 				this->contents.insert(inpoint, curnode);
-
-				std::cout << curnode.getfullname() << std::endl;
 				localsize++;
 			}
 		}
