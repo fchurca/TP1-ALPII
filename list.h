@@ -7,9 +7,10 @@
 *******************************************************************************/
 #ifndef __LIST_H__
 #define __LIST_H__
-#include <cstdlib>
 
+#include <cstdlib>
 #include <stdexcept>
+
 //**********************************************************
 // namespace custom
 //	Contiene clases diseñadas para reemplazar el uso de clases STL, compartiendo
