@@ -140,7 +140,7 @@ void FSModel::search(
 			// Match all dirs
 				it->getisDirectory() || (
 				// Files should have a size between, and including, min and max
-					(it->getsize() <= maxsize) ||
+					(it->getsize() <= maxsize) &&
 					(it->getsize() >= minsize)
 				)
 			)
