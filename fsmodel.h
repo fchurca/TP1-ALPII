@@ -13,18 +13,23 @@
 	#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
 #else
 
-#if defined(FSMODEL_VECTOR)
-//	#include <vector>
-//	typedef std::vector<FSNode> container;
-	#include "vector.h"
-	typedef custom::vector<FSNode> container;
-#elif defined(FSMODEL_LIST)
-//	#include <list>
-//	typedef std::list<FSNode> container;
-	#include "list.h"
-	typedef custom::list<FSNode> container;
+#if defined(FSMODEL_STD)
+	#if defined(FSMODEL_VECTOR)
+		#include <vector>
+		typedef std::vector<FSNode> container;
+	#elif defined(FSMODEL_LIST)
+		#include <list>
+		typedef std::list<FSNode> container;
+	#endif
+#else
+	#if defined(FSMODEL_VECTOR)
+		#include "vector.h"
+		typedef custom::vector<FSNode> container;
+	#elif defined(FSMODEL_LIST)
+		#include "list.h"
+		typedef custom::list<FSNode> container;
+	#endif
 #endif
-
 class FSModel{
 public:
 //**************************************
