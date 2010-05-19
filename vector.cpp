@@ -14,6 +14,7 @@ namespace custom{
 	}
 	template <class T> vector<T>::~vector(){
 		delete[] this->contents;
+		this->contents = NULL;
 	}
 	template <class T> T & vector<T>::at(unsigned long pos){
 		if (pos < Size){
@@ -66,32 +67,6 @@ namespace custom{
 			delete[] this->contents;
 			this->contents = contents;
 			this->capacity = capacity;
-		}
-	}
-
-	template <class T> vector<T>::iterator::iterator(const iterator & newit){
-		this->parent = newit.parent;
-		this->pos = newit.pos;
-		this->at_end = newit.pos;
-		this->initialized = newit.initialized;
-	}
-	template <class T> T & vector<T>::iterator::operator*(){
-		if (this->initialized){
-			return parent->at(this->pos);
-		}else{
-			throw std::runtime_error("Iterator not initialized");
-		}
-	}
-	template <class T> void vector<T>::iterator::operator++(){
-		if (this->initialized){
-			if (this->at_end){
-				throw std::runtime_error("Iterator at end");
-			}else{
-				this->pos++;
-				this->at_end = (this->pos == this->parent->size());
-			}
-		}else{
-			throw std::runtime_error("Iterator not initialized");
 		}
 	}
 }

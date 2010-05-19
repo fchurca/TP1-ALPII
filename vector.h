@@ -86,8 +86,39 @@ namespace custom{
 				this->parent = NULL;
 				this->initialized = false;
 			}
-			iterator(const iterator & newit);
-			T & operator*();
+		//******************
+		// Constructor copiador
+		//	Precondiciones:
+		//		(ninguna)
+		//	Postcondiciones:
+		//		* El iterador es una copia del iterador dado
+			iterator(const iterator & newit){
+				this->parent = newit.parent;
+				this->pos = newit.pos;
+				this->at_end = newit.pos;
+				this->initialized = newit.initialized;
+			}
+		//******************
+		// Operador de indirección
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//	Postcondiciones:
+		//		* Devuelve una referencia al contenido del vector
+		//	correspondiente al iterador
+			T & operator*(){
+				if (this->initialized){
+					return parent->at(this->pos);
+				}else{
+					throw std::runtime_error("Iterator not initialized");
+				}
+			}
+		//******************
+		// Operador de miembro por indirección
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//	Postcondiciones:
+		//		* Devuelve un puntero al contenido de la lista correspondiente
+		//	al iterador, para usar algún miembro suyo
 			T * operator->(){
 				if(this->initialized){
 					return &(this->parent->at(pos));
@@ -95,9 +126,23 @@ namespace custom{
 					throw std::runtime_error("Iterator not initialized");
 				}
 			}
+		//******************
+		// Operador de desigualdad
+		//	Precondiciones:
+		//		* Los iteradores debe haber sido inicializados
+		//		* Los iteradores deben pertenecer al mismo contenedor
+		//	Postcondiciones:
+		//		* Devuelve si ambos iteradores no apuntan al mismo elemento
 			bool operator!=(const iterator & newit){
 				return ! ((*this) == newit);
 			}
+		//******************
+		// Operador igualdad
+		//	Precondiciones:
+		//		* Los iteradores debe haber sido inicializados
+		//		* Los iteradores deben pertenecer al mismo contenedor
+		//	Postcondiciones:
+		//		* Devuelve si ambos iteradores apuntan al mismo elemento
 			bool operator==(const iterator & newit){
 				if (!(this->initialized || newit.initialized)){
 					throw std::runtime_error("Iterator not initialized");
@@ -109,20 +154,113 @@ namespace custom{
 					return this->pos == newit.pos;
 				}
 			}
-			void operator++();
+		//******************
+		// Operador de preincremento
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//		* El iterador no debe estar al final de la lista
+		//	Postcondiciones:
+		//		* El iterador avanza al próximo nodo
+		//		* Retorna una referencia al iterador, que ahora apunta al
+		//	próximo nodo
+			void operator++(){
+				(*this)++;
+			}
+		//******************
+		// Operador de postincremento
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//		* El iterador no debe estar al final de la lista
+		//	Postcondiciones:
+		//		* El iterador avanza al próximo nodo
+		//		* Retorna una referencia al iterador, que ahora apunta al
+		//	próximo nodo
 			void operator++(int){
-				++(*this);
+				if (this->initialized){
+					if (this->at_end){
+						throw std::runtime_error("Iterator at end");
+					}else{
+						this->pos++;
+						this->at_end = (this->pos == this->parent->size());
+					}
+				}else{
+					throw std::runtime_error("Iterator not initialized");
+				}
 			}
 		friend class vector;
 		};
+	//******************
+	// Constructor por defecto
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* El vector fue creado vacío, con capacidad para un elemento
 		vector();
-		~vector()
+	//******************
+	// Destructor
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Se libera la memoria usada por el vector. Se apunta el contenido
+	//	del vector a NULL para que todo acceso falle de la forma menos
+	//	destructiva posible
+		~vector();
+	//******************
+	// Acceso por índice
+	//	Precondiciones:
+	//		* El índice debe apuntar a un elemento existente del vector
+	//	Postcondiciones:
+	//		* Devuelve una referencia al pos-ésimo elemento del vector
 		T & at(unsigned long pos);
+	//******************
+	// Leer tamaño
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Devuelve la cantidad de elementos almacenados en el vector
 		unsigned long size() const;
+	//******************
+	// Borrar todo el contenido
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Establece el tamaño en cero
 		void clear();
+	//******************
+	// Cambiar capacidad
+	//	Precondiciones:
+	//		* La capacidad nueva debe ser mayor a la antigua
+	//	Postcondiciones:
+	//		* Reemplaza el arreglo almacenado por uno de mayor tamaño
+	//		* Copia los contenidos del viejo al nuevo
+	//		* Libera la memoria usada por el arreglo viejo
 		void change_capacity(unsigned long capacity);
+	//******************
+	// Agregar al final del vector
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Agrega un elemento al final del vector
+	//		* Incrementa el tamaño en un elemento más
+	//		* Si no había espacio libre, duplica la capacidad. Se hace por
+	//	cuestiones estadísticas; "si ya almacenamos una determinada cantidad n
+	//	de elementos, es posible que querramos almacenar n elementos más".
 		void push_back(const T & data);
-		T pop_back();;
+	//******************
+	// Remover desde el frente del vector
+	//	Precondiciones:
+	//		* El vector debe tener un elemento o más
+	//	Postcondiciones:
+	//		* Quita un elemento del final del vector
+	//		* Decrementa el tamaño en un elemento menos
+		T pop_back();
+	//******************
+	// Iterador al principio del vector
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Devuelve un iterador que apunta al principio del vector
+	//		* Si es un vector vacío, el iterador también apunta al final
 		iterator begin(){
 			iterator ret;
 			ret.parent = this;
@@ -131,6 +269,12 @@ namespace custom{
 			ret.pos = 0;
 			return ret;
 		}
+	//******************
+	// Iterador al final del vector
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Devuelve un iterador que apunta al final del vector
 		iterator end(){
 			iterator ret;
 			ret.parent = this;
@@ -139,6 +283,15 @@ namespace custom{
 			ret.pos = this->Size;
 			return ret;
 		}
+	//******************
+	// Insertar en la posición dada por un iterador
+	//	Precondiciones:
+	//		* El iterador debe haber sido inicializado
+	//		* El iterador debe pertenecer a el contenedor en cuestión
+	//		* El iterador debe apuntar, como mucho, al elemento siguiente al
+	//	último elemento del vector
+	//	Postcondiciones:
+	//		* Agrega un nodo en la posición dada
 		void insert(const iterator & it, const T & data);
 	};
 }
