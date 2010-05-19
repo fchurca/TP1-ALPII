@@ -385,5 +385,6 @@ namespace custom{
 			}
 		}
 	};
-};
+}
+
 #endif	//	__LIST_H__
