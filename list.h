@@ -64,7 +64,7 @@ namespace custom{
 						throw std::runtime_error("Iterator at end");
 					}else{
 						this->pos = this->pos->next;
-						if (! (this->pos)){
+						if (this->pos == this->parent->last){
 							this->at_end = true;
 						}
 					}
@@ -95,7 +95,7 @@ namespace custom{
 		}
 		list();
 		~list();
-		size_t size() const;
+		unsigned long size() const;
 		void clear();
 		void push_back(const T & data);
 		T pop_front();
@@ -107,19 +107,21 @@ namespace custom{
 			}else if (it.at_end || ! this->last){
 				push_back(data);
 			}else if (it.pos == this->first){
+				this->Size++;
 				node * to_add = new node(data, this->first);
 				this->first = to_add;
 				if (! this->last){
 					this->last = to_add;
 				}
 			}else{
+				this->Size++;
 				node * to_add = new node(it.pos->data, it.pos->next);
 				it.pos->next = to_add;
 				it.pos->data = data;
 			}
 		}
 	protected:
-		size_t Size;
+		unsigned long Size;
 		node
 			* first,
 			* last;

@@ -23,7 +23,7 @@ namespace custom{
 		this->clear();
 	};
 
-	template <class T> size_t list<T>::size() const{
+	template <class T> unsigned long list<T>::size() const{
 		return this->Size;
 	};
 
