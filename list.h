@@ -39,9 +39,11 @@ namespace custom{
 	template <class T>
 	class list{
 	public:
-		class iterator;	//	Forward declaration
+	//	Forward declaration
+		class iterator;
 	protected:
-		class node;		//	Forward declaration
+	//	Forward declaration
+		class node;
 	// Cantidad de elementos guardados en el contenedor
 		unsigned long Size;
 	// Punteros a nodo
