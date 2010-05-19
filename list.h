@@ -243,12 +243,43 @@ namespace custom{
 			}
 		friend class list;
 		};
-		list();
-		~list();
-		unsigned long size() const;
-		void clear();
-		void push_back(const T & data);
-		T pop_front();
+		list(){
+			this->first = this->last = NULL;
+			this->Size = 0;
+		}
+		~list(){
+			this->clear();
+		};
+		unsigned long size() const{
+			return this->Size;
+		};
+		void clear(){
+			while(this->first){
+				this->pop_front();
+			}
+		}
+		void push_back(const T & data){
+			node * to_add = new node(data, NULL);
+			if (this->last){
+				this->last->next = to_add;
+			}else{
+				this->first = to_add;
+			}
+			this->last = to_add;
+			this->Size++;
+		};
+		T pop_front(){
+			if (this->first){
+				T ret = this->first->data;
+				node * aux = this->first;
+				this->first = this->first->next;
+				delete aux;
+				this->Size--;
+				return ret;
+			}else{
+				throw std::runtime_error("Nothing to pop");
+			}
+		};
 		iterator begin(){
 			iterator ret;
 			ret.parent = this;
@@ -288,5 +319,4 @@ namespace custom{
 		}
 	};
 };
-#include "list.cpp"
 #endif	//	__LIST_H__
