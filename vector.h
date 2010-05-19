@@ -54,7 +54,7 @@ namespace custom{
 	//	Miembros:
 	//		parent		//	Puntero a objeto padre
 	//		pos			//	Índice a nodo referido
-	//		at_end		//	Si está al final de la lista o no
+	//		at_end		//	Si el iterador está al final de la lista o no
 	//		initialized	//	Si el iterador está inicializado o no
 	//	Métodos:
 	//		Constructor por defecto
@@ -66,12 +66,26 @@ namespace custom{
 	//		Operador de preincremento
 	//		Operador de postincremento
 		class iterator{
+		// Puntero a contenedor padre (donde reside el nodo referido)
 			vector * parent;
+		// Índice al nodo referido
 			unsigned long pos;
+		// Si el iterador está al final de la lista o no
 			bool at_end;
+		// Si el iterador fue inicializado o no
 			bool initialized;
 		public:
-			iterator();
+		//******************
+		// Constructor por defecto
+		//	Precondiciones:
+		//		(ninguna)
+		//	Postcondiciones:
+		//		* Marca al nodo como no inicializado. Ésto se hace para que no
+		//	se pueda usar el nodo si no se especificó donde apunta.
+			iterator(){
+				this->parent = NULL;
+				this->initialized = false;
+			}
 			iterator(const iterator & newit);
 			T & operator*();
 			T * operator->(){

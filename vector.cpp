@@ -69,10 +69,6 @@ namespace custom{
 		}
 	}
 
-	template <class T> vector<T>::iterator::iterator(){
-		this->parent = NULL;
-		this->initialized = false;
-	}
 	template <class T> vector<T>::iterator::iterator(const iterator & newit){
 		this->parent = newit.parent;
 		this->pos = newit.pos;

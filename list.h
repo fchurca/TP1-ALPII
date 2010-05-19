@@ -141,6 +141,7 @@ namespace custom{
 		//		* Marca al nodo como no inicializado. Ésto se hace para que no
 		//	se pueda usar el nodo si no se especificó donde apunta.
 			iterator(){
+				this->parent = NULL;
 				this->initialized = false;
 			}
 		//******************
