@@ -32,8 +32,8 @@ namespace custom{
 //		Borrar todo el contenido
 //		Agregar al final de la lista
 //		Remover desde el principio de la lista
-//		Iterador hacia el principio de la lista
-//		Iterador hacia el final de la lista
+//		Iterador al principio de la lista
+//		Iterador al final de la lista
 //		Insertar un dato en la posición dada por un iterador
 	template <class T>
 	class list{
@@ -243,21 +243,53 @@ namespace custom{
 			}
 		friend class list;
 		};
+	//******************
+	// Constructor por defecto
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* La lista fue creada vacía
 		list(){
 			this->first = this->last = NULL;
 			this->Size = 0;
 		}
+	//******************
+	// Destructor
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* La lista está vacía
 		~list(){
 			this->clear();
 		};
+	//******************
+	// Leer tamaño
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Devuelve la cantidad de elementos en la lista
 		unsigned long size() const{
 			return this->Size;
 		};
+	//******************
+	// Borrar todo el contenido
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Quita todos los elementos de la lista
+	//		* Establece el tamaño en cero
 		void clear(){
 			while(this->first){
 				this->pop_front();
 			}
 		}
+	//******************
+	// Agregar al final de la lista
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Agrega un elemento al final de la lista
+	//		* Incrementa el tamaño en un elemento más
 		void push_back(const T & data){
 			node * to_add = new node(data, NULL);
 			if (this->last){
@@ -268,6 +300,13 @@ namespace custom{
 			this->last = to_add;
 			this->Size++;
 		};
+	//******************
+	// Remover desde el frente de la lista
+	//	Precondiciones:
+	//		* La lista debe tener un elemento o más
+	//	Postcondiciones:
+	//		* Quita un elemento del inicio de la lista
+	//		* Decrementa el tamaño en un elemento menos
 		T pop_front(){
 			if (this->first){
 				T ret = this->first->data;
@@ -280,6 +319,13 @@ namespace custom{
 				throw std::runtime_error("Nothing to pop");
 			}
 		};
+	//******************
+	// Iterador al principio de la lista
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Devuelve un iterador que apunta al principio de la lista
+	//		* Si es una lista vacía, el iterador también apunta al final
 		iterator begin(){
 			iterator ret;
 			ret.parent = this;
@@ -288,6 +334,12 @@ namespace custom{
 			ret.pos = this->first;
 			return ret;
 		}
+	//******************
+	// Iterador al final de la lista
+	//	Precondiciones:
+	//		(ninguna)
+	//	Postcondiciones:
+	//		* Devuelve un iterador que apunta al final de la lista
 		iterator end(){
 			iterator ret;
 			ret.parent = this;
@@ -296,6 +348,13 @@ namespace custom{
 			ret.pos = NULL;
 			return ret;
 		}
+	//******************
+	// Insertar en la posición dada por un iterador
+	//	Precondiciones:
+	//		* El iterador debe haber sido inicializado
+	//		* El iterador debe pertenecer a el contenedor en cuestión
+	//	Postcondiciones:
+	//		* Agrega un nodo en la posición dada
 		void insert(const iterator & it, const T & data){
 			if (!it.initialized){
 				throw std::runtime_error("Iterator not initialized");
