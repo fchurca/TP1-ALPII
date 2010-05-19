@@ -39,10 +39,32 @@ namespace custom{
 //		Insertar un dato en la posición dada por un iterador
 	template <class T> class vector{
 		unsigned long
+		// Cantidad de elementos ya almacenados en el vector
 			Size,
+		// Cantidad de elementos que se pueden almacenar. Si se quiere almacenar
+		//	más que esta cantidad de elementos, las funciones de inserción
+		//	aumentarán la capacidad pidiendo más memoria (ver list::push_back())
 			capacity;
+	// Arreglo de elementos de tipo T residente en memoria heap
 		T * contents;
 	public:
+	//**************************************
+	// custom::vector::iterator
+	//	Iterador progresivo para una lista simplemente enlazada
+	//	Miembros:
+	//		parent		//	Puntero a objeto padre
+	//		pos			//	Índice a nodo referido
+	//		at_end		//	Si está al final de la lista o no
+	//		initialized	//	Si el iterador está inicializado o no
+	//	Métodos:
+	//		Constructor por defecto
+	//		Constructor copiador
+	//		Operador de indirección
+	//		Operador de miembro por indirección
+	//		Operador de desigualdad
+	//		Operador de igualdad
+	//		Operador de preincremento
+	//		Operador de postincremento
 		class iterator{
 			vector * parent;
 			unsigned long pos;

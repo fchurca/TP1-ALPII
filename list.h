@@ -110,9 +110,9 @@ namespace custom{
 	// custom::list::iterator
 	//	Iterador progresivo para una lista simplemente enlazada
 	//	Miembros:
-	//		parent		//	Puntero a objeto padre
+	//		parent		//	Puntero a contenedor padre
 	//		pos			//	Puntero a nodo referido
-	//		at_end		//	Si está al final de la lista o no
+	//		at_end		//	Si el iterador está al final de la lista o no
 	//		initialized	//	Si el iterador está inicializado o no
 	//	Métodos:
 	//		Constructor por defecto
@@ -124,9 +124,13 @@ namespace custom{
 	//		Operador de preincremento
 	//		Operador de postincremento
 		class iterator{
+		// Puntero a contenedor padre (donde reside el nodo referido)
 			list * parent;
+		// Puntero al nodo referido
 			node * pos;
+		// Si el iterador está al final de la lista o no
 			bool at_end;
+		// Si el iterador fue inicializado o no
 			bool initialized;
 		public:
 		//******************
