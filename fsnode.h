@@ -10,8 +10,8 @@
 
 //**************************************
 // humansize()
-//	Translates a size_t size in bytes into STL string with binary powers
-std::string humansize(size_t size);
+//	Translates a unsigned long size in bytes into STL string with binary powers
+std::string humansize(unsigned long size);
 
 class FSNode{
 public:
@@ -84,7 +84,7 @@ public:
 	bool getisDirectory() const;
 	time_t getmtime() const;
 	std::string getCmtime() const;
-	size_t getsize() const;
+	unsigned long getsize() const;
 
 //**************************************
 // Members
@@ -108,7 +108,7 @@ protected:
 
 //******************
 // Sub(1)elements if directory, or size of the node in bytes if file
-	size_t size;
+	unsigned long size;
 
 //******************
 // Unix time of last modification

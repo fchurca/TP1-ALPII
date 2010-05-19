@@ -7,14 +7,14 @@
 
 namespace custom{
 	template <class T> class vector{
-		size_t
+		unsigned long
 			Size,
 			capacity;
 		T * contents;
 	public:
 		class iterator{
 			vector * parent;
-			size_t pos;
+			unsigned long pos;
 			bool at_end;
 			bool initialized;
 		public:
@@ -66,13 +66,13 @@ namespace custom{
 			ret.pos = this->Size;
 			return ret;
 		}
-		T & at(size_t pos);
-		size_t size() const;
+		T & at(unsigned long pos);
+		unsigned long size() const;
 		void clear();
 		void push_back(const T & data);
 		T pop_back();
 		void insert(const iterator & it, const T & data);
-		void change_capacity(size_t capacity);
+		void change_capacity(unsigned long capacity);
 	};
 }
 

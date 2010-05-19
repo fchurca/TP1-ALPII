@@ -119,14 +119,14 @@ std::string FSNode::getCmtime() const{
 	aux.erase(aux.length() - 1);
 	return aux;
 }
-size_t FSNode::getsize() const{
+unsigned long FSNode::getsize() const{
 	return this->size;
 }
 
-std::string humansize(size_t size){
+std::string humansize(unsigned long size){
 	const char pows[] = "BKMGTPEZY";
 	std::stringstream ss;
-	size_t scale = 1;
+	unsigned long scale = 1;
 	while ((size > 1024) && (scale < sizeof(pows))){
 		size >>= 10;
 		scale++;
@@ -146,7 +146,7 @@ using namespace std;
 int main(int argc, char **argv){
 	int ret = EXIT_SUCCESS;
 	if (argc > 1){
-		for (size_t i = 1; i < argc; i++){
+		for (unsigned long i = 1; i < argc; i++){
 			try{
 				FSNode node(argv[i]);
 				node.dump(cout);

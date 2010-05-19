@@ -15,14 +15,14 @@ namespace custom{
 	template <class T> vector<T>::~vector(){
 		delete[] this->contents;
 	}
-	template <class T> T & vector<T>::at(size_t pos){
+	template <class T> T & vector<T>::at(unsigned long pos){
 		if (pos < Size){
 			return this->contents[pos];
 		}else{
 			throw std::runtime_error("Outside bonds");
 		}
 	}
-	template <class T> size_t vector<T>::size() const{
+	template <class T> unsigned long vector<T>::size() const{
 		return this->Size;
 	}
 	template <class T> void vector<T>::clear(){
@@ -48,19 +48,19 @@ namespace custom{
 			throw std::runtime_error("Outside bonds");
 		}else{
 			this->push_back(data);
-			for(size_t i = this->Size - 1; i > it.pos; i--){
+			for(unsigned long i = this->Size - 1; i > it.pos; i--){
 				T aux = this->at(i);
 				this->at(i) = this->at(i-1);
 				this->at(i-1) = aux;
 			}
 		}
 	}
-	template <class T> void vector<T>::change_capacity(size_t capacity){
+	template <class T> void vector<T>::change_capacity(unsigned long capacity){
 		if (this->capacity > capacity){
 			throw std::runtime_error("New capacity smaller than old");
 		}else{
 			T * contents = new T [capacity];
-			for(size_t i = 0; i < this->Size; i++){
+			for(unsigned long i = 0; i < this->Size; i++){
 				contents[i] = this->contents[i];
 			}
 			delete[] this->contents;
