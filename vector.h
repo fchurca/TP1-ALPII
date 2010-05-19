@@ -1,11 +1,42 @@
+/*******************************************************************************
+ *	list.h
+ *	Librería de vector dinámico
+ *	Implementación de lista: Fiona González Lisella (Padrón 91454)
+ *	Implementación de iteradores: Federico Churca Torrusio (Padrón 91352)
+ *	Documentación: Federico Churca Torrusio (Padrón 91352)
+*******************************************************************************/
 #ifndef __VECTOR_H__
 #define __VECTOR_H__
 
 #include <cstdlib>
-
 #include <stdexcept>
 
+//**********************************************************
+// namespace custom
+//	Contiene clases diseñadas para reemplazar el uso de clases STL, compartiendo
+//	los mismos nombres de procedimientos y el mismo comportamiento externo
 namespace custom{
+//**************************************
+// custom::vector
+//	Vector de arreglo dinámico
+//	Clases propias:
+//		iterator	//	Iterador progresivo
+//	Miembros:
+//		Size		//	Cantidad de elementos almacenados
+//		capacity	//	Cantidad de elementos que se pueden almacenar
+//		contents	//	Arreglo dinámico con los contenidos del vector
+//	Métodos:
+//		Constructor por defecto
+//		Destructor
+//		Leer tamaño
+//		Acceso por índice
+//		Borrar todo el contenido
+//		Cambiar capacidad
+//		Agregar al final del vector
+//		Remover desde el final del vector
+//		Iterador al principio del vector
+//		Iterador al final del vector
+//		Insertar un dato en la posición dada por un iterador
 	template <class T> class vector{
 		unsigned long
 			Size,
@@ -49,7 +80,13 @@ namespace custom{
 		friend class vector;
 		};
 		vector();
-		~vector();
+		~vector()
+		T & at(unsigned long pos);
+		unsigned long size() const;
+		void clear();
+		void change_capacity(unsigned long capacity);
+		void push_back(const T & data);
+		T pop_back();;
 		iterator begin(){
 			iterator ret;
 			ret.parent = this;
@@ -66,13 +103,7 @@ namespace custom{
 			ret.pos = this->Size;
 			return ret;
 		}
-		T & at(unsigned long pos);
-		unsigned long size() const;
-		void clear();
-		void push_back(const T & data);
-		T pop_back();
 		void insert(const iterator & it, const T & data);
-		void change_capacity(unsigned long capacity);
 	};
 }
 
