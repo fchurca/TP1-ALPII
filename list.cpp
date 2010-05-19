@@ -6,52 +6,6 @@
 #include <stdexcept>
 
 namespace custom{
-//**************************************
-// list::iterator methods
-//******************
-// list::iterator::operator*()
-//	Indirection
-	template <class T>
-	T & list<T>::iterator::operator*(){
-		if(this->initialized){
-			return pos->data;
-		}else{
-			throw std::runtime_error("Iterator not initialized");
-		}
-	}
-//******************
-// list::iterator::operator->()
-//	Member by indirection
-	template <class T>
-	T * list<T>::iterator::operator->(){
-		if(this->initialized){
-			return &(pos->data);
-		}else{
-			throw std::runtime_error("Iterator not initialized");
-		}
-	}
-//******************
-// list::iterator::operator!=(const iterator &)
-//	Not equal to
-	template <class T>
-	bool list<T>::iterator::operator!=(const list<T>::iterator & newit){
-		return ! ((*this) == newit);
-	}
-//******************
-// list::iterator::operator==(const iterator &)
-//	Equal to
-	template <class T>
-	bool list<T>::iterator::operator==(const list<T>::iterator & newit){
-		if (!(this->initialized || newit.initialized)){
-			throw std::runtime_error("Iterator not initialized");
-		}else if (this->parent != newit.parent){
-			throw std::runtime_error("Different iterator parents");
-		}else if (this->at_end && newit.at_end){
-			return true;
-		}else{
-			return this->pos == newit.pos;
-		}
-	}
 
 	template <class T> list<T>::list(){
 		this->first = this->last = NULL;

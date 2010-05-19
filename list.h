@@ -114,7 +114,12 @@ namespace custom{
 	//	Métodos:
 	//		Constructor por defecto
 	//		Constructor copiador
-	
+	//		Operador de indirección
+	//		Operador de miembro por indirección
+	//		Operador de desigualdad
+	//		Operador de igualdad
+	//		Operador de preincremento
+	//		Operador de postincremento
 		class iterator{
 			list * parent;
 			node * pos;
@@ -143,14 +148,84 @@ namespace custom{
 				this->at_end = newit.at_end;
 				this->initialized = newit.initialized;
 			}
-			T & operator*();
-			T * operator->();
-			bool operator!=(const iterator & newit);
-			bool operator==(const iterator & newit);
+		//******************
+		// Operador de indirección
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//	Postcondiciones:
+		//		* Devuelve una referencia al contenido de la lista
+		//	correspondiente al iterador
+			T & operator*(){
+				if(this->initialized){
+					return pos->data;
+				}else{
+					throw std::runtime_error("Iterator not initialized");
+				}
+			}
+		//******************
+		// Operador de miembro por indirección
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//	Postcondiciones:
+		//		* Devuelve un puntero al contenido de la lista correspondiente
+		//	al iterador, para usar algún miembro suyo
+			T * operator->(){
+				if(this->initialized){
+					return &(pos->data);
+				}else{
+					throw std::runtime_error("Iterator not initialized");
+				}
+			}
+		//******************
+		// Operador de desigualdad
+		//	Precondiciones:
+		//		* Los iteradores debe haber sido inicializados
+		//		* Los iteradores deben pertenecer al mismo contenedor
+		//	Postcondiciones:
+		//		* Devuelve si ambos iteradores no apuntan al mismo elemento
+			bool operator!=(const iterator & newit){
+				return ! ((*this) == newit);
+			}
+		//******************
+		// Operador igualdad
+		//	Precondiciones:
+		//		* Los iteradores debe haber sido inicializados
+		//		* Los iteradores deben pertenecer al mismo contenedor
+		//	Postcondiciones:
+		//		* Devuelve si ambos iteradores apuntan al mismo elemento
+			bool operator==(const iterator & newit){
+				if (!(this->initialized || newit.initialized)){
+					throw std::runtime_error("Iterator not initialized");
+				}else if (this->parent != newit.parent){
+					throw std::runtime_error("Different iterator parents");
+				}else if (this->at_end && newit.at_end){
+					return true;
+				}else{
+					return this->pos == newit.pos;
+				}
+			}
+		//******************
+		// Operador de preincremento
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//		* El iterador no debe estar al final de la lista
+		//	Postcondiciones:
+		//		* El iterador avanza al próximo nodo
+		//		* Retorna una referencia al iterador, que ahora apunta al
+		//	próximo nodo
 			iterator & operator++(){
 				(*this)++;
 				return *this;
 			}
+		//******************
+		// Operador de postincremento
+		//	Precondiciones:
+		//		* El iterador debe haber sido inicializado
+		//		* El iterador no debe estar al final de la lista
+		//	Postcondiciones:
+		//		* El iterador avanza al próximo nodo
+		//		* Retorna una referencia al iterador, que ahora apunta al
+		//	próximo nodo
 			iterator & operator++(int){
 				if (this->initialized){
 					if (this->at_end){
