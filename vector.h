@@ -255,7 +255,7 @@ namespace custom{
 			if (this->capacity > capacity){
 				throw std::runtime_error("New capacity smaller than old");
 			}else{
-				T * contents = new T [capacity];
+				T * contents = new T[capacity];
 				for(unsigned long i = 0; i < this->Size; i++){
 					contents[i] = this->contents[i];
 				}
@@ -275,7 +275,7 @@ namespace custom{
 	//	cuestiones estadísticas; "si ya almacenamos una determinada cantidad n
 	//	de elementos, es posible que querramos almacenar n elementos más".
 		void push_back(const T & data){
-			if (this ->Size == this->capacity){
+			if (this->Size == this->capacity){
 				this->change_capacity(this->capacity * 2);
 			}
 			this->contents[this->Size] = data;
@@ -351,7 +351,5 @@ namespace custom{
 		}
 	};
 }
-
-#include "vector.cpp"
 
 #endif	//	__VECTOR_H__
