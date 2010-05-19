@@ -87,7 +87,6 @@ unsigned long FSModel::load(const std::string & path){
 void FSModel::dump(std::ostream & out){
 	out
 		<< "Contents of " << this->path << std::endl
-		<< "Total: " << this->getsize() << " elements" << std::endl
 		<< "Type Size\tDate                     Name" << std::endl;
 	for (
 		container::iterator
@@ -98,6 +97,7 @@ void FSModel::dump(std::ostream & out){
 	){
 		it->dump(out);
 	}
+	out << << "Total: " << this->getsize() << " elements" << std::endl
 }
 
 //******************
@@ -149,7 +149,9 @@ void FSModel::search(
 			found++;
 		}
 	}
-	out << "Found: " << found << std::endl;
+	out <<
+		"Searching for \"" << expression << "\" in \"" << this->path
+		<< "\" turned out  " << found << " results" << std::endl;
 }
 
 //**************************
