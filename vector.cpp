@@ -45,7 +45,11 @@ namespace custom{
 	}
 	template <class T>
 		void vector<T>::insert(const vector<T>::iterator & it, const T & data){
-		if (it.pos > this->Size){
+		if (!it.initialized){
+			throw std::runtime_error("Iterator not initialized");
+		}else if (it.parent != this){
+			throw std::runtime_error("Wrong iterator parent");
+		}else if (it.pos > this->Size){
 			throw std::runtime_error("Outside bonds");
 		}else{
 			this->push_back(data);
