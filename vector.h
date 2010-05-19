@@ -195,7 +195,11 @@ namespace custom{
 	//		(ninguna)
 	//	Postcondiciones:
 	//		* El vector fue creado vacío, con capacidad para un elemento
-		vector();
+		vector(){
+			this->capacity = 1;
+			this->contents = new T[this->capacity];
+			this->Size = 0;
+		}
 	//******************
 	// Destructor
 	//	Precondiciones:
@@ -204,28 +208,41 @@ namespace custom{
 	//		* Se libera la memoria usada por el vector. Se apunta el contenido
 	//	del vector a NULL para que todo acceso falle de la forma menos
 	//	destructiva posible
-		~vector();
+		~vector(){
+			delete[] this->contents;
+			this->contents = NULL;
+		}
 	//******************
 	// Acceso por índice
 	//	Precondiciones:
 	//		* El índice debe apuntar a un elemento existente del vector
 	//	Postcondiciones:
 	//		* Devuelve una referencia al pos-ésimo elemento del vector
-		T & at(unsigned long pos);
+		T & at(unsigned long pos){
+			if (pos < this->Size){
+				return this->contents[pos];
+			}else{
+				throw std::runtime_error("Outside bonds");
+			}
+		}
 	//******************
 	// Leer tamaño
 	//	Precondiciones:
 	//		(ninguna)
 	//	Postcondiciones:
 	//		* Devuelve la cantidad de elementos almacenados en el vector
-		unsigned long size() const;
+		unsigned long size() const{
+			return this->Size;
+		}
 	//******************
 	// Borrar todo el contenido
 	//	Precondiciones:
 	//		(ninguna)
 	//	Postcondiciones:
 	//		* Establece el tamaño en cero
-		void clear();
+		void clear(){
+			this->Size = 0;
+		}
 	//******************
 	// Cambiar capacidad
 	//	Precondiciones:
@@ -234,7 +251,19 @@ namespace custom{
 	//		* Reemplaza el arreglo almacenado por uno de mayor tamaño
 	//		* Copia los contenidos del viejo al nuevo
 	//		* Libera la memoria usada por el arreglo viejo
-		void change_capacity(unsigned long capacity);
+		void change_capacity(unsigned long capacity){
+			if (this->capacity > capacity){
+				throw std::runtime_error("New capacity smaller than old");
+			}else{
+				T * contents = new T [capacity];
+				for(unsigned long i = 0; i < this->Size; i++){
+					contents[i] = this->contents[i];
+				}
+				delete[] this->contents;
+				this->contents = contents;
+				this->capacity = capacity;
+			}
+		}
 	//******************
 	// Agregar al final del vector
 	//	Precondiciones:
@@ -245,7 +274,13 @@ namespace custom{
 	//		* Si no había espacio libre, duplica la capacidad. Se hace por
 	//	cuestiones estadísticas; "si ya almacenamos una determinada cantidad n
 	//	de elementos, es posible que querramos almacenar n elementos más".
-		void push_back(const T & data);
+		void push_back(const T & data){
+			if (this ->Size == this->capacity){
+				this->change_capacity(this->capacity * 2);
+			}
+			this->contents[this->Size] = data;
+			this->Size++;
+		}
 	//******************
 	// Remover desde el frente del vector
 	//	Precondiciones:
@@ -253,7 +288,13 @@ namespace custom{
 	//	Postcondiciones:
 	//		* Quita un elemento del final del vector
 	//		* Decrementa el tamaño en un elemento menos
-		T pop_back();
+		T pop_back(){
+			if (this->Size){
+				return this->contents[--(this->Size)];
+			}else{
+				throw std::runtime_error("Nothing to pop");
+			}
+		}
 	//******************
 	// Iterador al principio del vector
 	//	Precondiciones:
@@ -292,7 +333,22 @@ namespace custom{
 	//	último elemento del vector
 	//	Postcondiciones:
 	//		* Agrega un nodo en la posición dada
-		void insert(const iterator & it, const T & data);
+		void insert(const iterator & it, const T & data){
+			if (!it.initialized){
+				throw std::runtime_error("Iterator not initialized");
+			}else if (it.parent != this){
+				throw std::runtime_error("Wrong iterator parent");
+			}else if (it.pos > this->Size){
+				throw std::runtime_error("Outside bonds");
+			}else{
+				this->push_back(data);
+				for(unsigned long i = this->Size - 1; i > it.pos; i--){
+					T aux = this->at(i);
+					this->at(i) = this->at(i-1);
+					this->at(i-1) = aux;
+				}
+			}
+		}
 	};
 }
 
