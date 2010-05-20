@@ -1,10 +1,10 @@
 ####################################
 # TPI: main binary
 
-TPIV: main.cpp expr.cpp fsmodel.cpp fsnode.cpp
+TPIV: main.cpp expr.cpp fsmodel.cpp fsnode.cpp tui.cpp
 	c++ $? -g -o $@ -DFSMODEL_VECTOR
 
-TPIL: main.cpp expr.cpp fsmodel.cpp fsnode.cpp
+TPIL: main.cpp expr.cpp fsmodel.cpp fsnode.cpp tui.cpp
 	c++ $? -g -o $@ -DFSMODEL_LIST
 
 ####################################
