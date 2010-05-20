@@ -16,9 +16,15 @@ int main(int argc, char **argv){
 	FSModel mymodel;
 	try{
 // Stub for console parameter parser
-//		for (int i = 1, next = 2; i < argc; i = next){
-//			next++;
-//		}
+		for (int i = 1, next = 2; i < argc; i = next){
+			if (*argv[i] == '-'){
+			}else{
+				cerr
+					<< "Parameter invalid: " << argv[i] << endl
+					<< "Did you mean \" -d " << argv[i] <<"\"?" << endl;
+			}
+			next++;
+		}
 		if (argc > 2){
 			if (!strcmp(argv[1], "-d")){
 				Cronometro cron;
