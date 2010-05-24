@@ -22,7 +22,7 @@ int main(int argc, char **argv){
 					<< "Load finished: " << cron.getTiempoTranscurrido()
 					<< " ms" << endl
 					<< "Loaded " << mymodel.getsize()
-					<< " elements" << endl;			
+					<< " elements" << endl;
 			}catch(runtime_error e){
 				cerr << e.what() << endl;
 			}
