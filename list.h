@@ -1,9 +1,9 @@
 /*******************************************************************************
  *	list.h
  *	Librería de lista simplemente enladada, con punteros a inicio y final
- *	Implementación de lista: Fiona González Lisella (Padrón 91454)
+ *	Implementación de lista:      Fiona González Lisella (Padrón 91454)
  *	Implementación de iteradores: Federico Churca Torrusio (Padrón 91352)
- *	Documentación: Federico Churca Torrusio (Padrón 91352)
+ *	Documentación:                Federico Churca Torrusio (Padrón 91352)
 *******************************************************************************/
 #ifndef __LIST_H__
 #define __LIST_H__
@@ -373,7 +373,7 @@ namespace custom{
 				throw std::logic_error("Wrong iterator parent");
 			}else if (it.at_end || ! this->Size){
 				push_back(data);
-			}else if (it.pos == this->first){
+			}else if (it.pos == this->first || ! it.pos){
 				this->Size++;
 				node * to_add = new node(data, this->first);
 				this->first = to_add;
