@@ -167,7 +167,7 @@ namespace custom{
 				if(this->initialized){
 					return pos->data;
 				}else{
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}
 			}
 		//******************
@@ -181,7 +181,7 @@ namespace custom{
 				if(this->initialized){
 					return &(pos->data);
 				}else{
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}
 			}
 		//******************
@@ -203,9 +203,9 @@ namespace custom{
 		//		* Devuelve si ambos iteradores apuntan al mismo elemento
 			bool operator==(const iterator & newit){
 				if (!(this->initialized || newit.initialized)){
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}else if (this->parent != newit.parent){
-					throw std::runtime_error("Different iterator parents");
+					throw std::logic_error("Different iterator parents");
 				}else if (this->at_end && newit.at_end){
 					return true;
 				}else{
@@ -237,7 +237,7 @@ namespace custom{
 			iterator & operator++(int){
 				if (this->initialized){
 					if (this->at_end){
-						throw std::runtime_error("Iterator at end");
+						throw std::logic_error("Iterator at end");
 					}else{
 						this->pos = this->pos->next;
 						if (this->pos == this->parent->last){
@@ -245,7 +245,7 @@ namespace custom{
 						}
 					}
 				}else{
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}
 				return *this;
 			}
@@ -327,7 +327,7 @@ namespace custom{
 				}
 				return ret;
 			}else{
-				throw std::runtime_error("Nothing to pop");
+				throw std::logic_error("Nothing to pop");
 			}
 		};
 	//******************
@@ -368,9 +368,9 @@ namespace custom{
 	//		* Agrega un nodo en la posición dada
 		void insert(const iterator & it, const T & data){
 			if (!it.initialized){
-				throw std::runtime_error("Iterator not initialized");
+				throw std::logic_error("Iterator not initialized");
 			}else if (it.parent != this){
-				throw std::runtime_error("Wrong iterator parent");
+				throw std::logic_error("Wrong iterator parent");
 			}else if (it.at_end || ! this->Size){
 				push_back(data);
 			}else if (it.pos == this->first){
