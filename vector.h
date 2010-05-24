@@ -1,9 +1,9 @@
 /*******************************************************************************
  *	list.h
  *	Librería de vector dinámico
- *	Implementación de lista: Fiona González Lisella (Padrón 91454)
+ *	Implementación de lista:      Fiona González Lisella (Padrón 91454)
  *	Implementación de iteradores: Federico Churca Torrusio (Padrón 91352)
- *	Documentación: Federico Churca Torrusio (Padrón 91352)
+ *	Documentación:                Federico Churca Torrusio (Padrón 91352)
 *******************************************************************************/
 #ifndef __VECTOR_H__
 #define __VECTOR_H__
