@@ -63,7 +63,6 @@ namespace custom{
 	//		Constructor por inicialización de datos
 	//		Constructor copiador
 		struct node{
-		protected:
 		// Puntero al nodo siguiente en la lista. NULL si último elemento.
 			node * next;
 		// Datos almacenados en el nodo
