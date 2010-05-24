@@ -28,17 +28,18 @@ void parser(istream & in, ostream & out, FSModel & model){
 				ss >> ws;
 				getline(ss, expression);
 			}else if (command == "help"){
-				out
-<< "Command Parameter   Description\n"
-<< "dump    (none)      Dump directory contents\n"
-<< "exit    (none)      Exit the program\n"
-<< "expr    expression  Save search expression\n"
-<< "help    (none)      Show help\n"
-<< "load    directory   Load directory contents\n"
-<< "maxsize size        Maximum file size in bytes (-1 for no restriction)\n"
-<< "minsize size        Minimum file size in bytes (0 for no restriction)\n"
-<< "search  (none)      Show matching fles\n"
-<< "status  (none)      Show current search criteria\n";
+				out << "\
+Command\tParameter\tDescription\n\
+dump\t(none)\t\tDump directory contents\n\
+exit\t(none)\t\tExit the program\n\
+help\t(none)\t\tShow help\n\
+search\t(none)\t\tShow matching fles\n\
+status\t(none)\t\tShow current search criteria\n\
+expr\texpression\tSave search expression\n\
+load\tdirectory\tLoad directory contents\n\
+maxsize\tsize\t\tMaximum file size in bytes (-1 for no restriction)\n\
+minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
+";
 			}else if (command == "load"){
 				ss >> ws;
 				getline(ss, dump);
@@ -66,13 +67,15 @@ void parser(istream & in, ostream & out, FSModel & model){
 					<< cron.getTiempoTranscurrido() << " ms" << endl;
 			}else if (command == "status"){
 				out
-					<< "Path:         \"" << model.getpath() << '\"' << endl
-					<< "Total files:  " << model.getsize() << endl
-					<< "Expression:   \"" << expression << '\"' << endl
-					<< "Minimum size: " << minsize << endl
-					<< "Maximum size: " << maxsize << endl;
+					<< "Path:\t\t\"" << model.getpath() << '\"' << endl
+					<< "Total files:\t" << model.getsize() << endl
+					<< "Expression:\t\"" << expression << '\"' << endl
+					<< "Minimum size:\t" << minsize << endl
+					<< "Maximum size:\t" << maxsize << endl;
 			}else{
-				out << command << " not a valid command" << endl;
+				if (command.length()){
+					out << command << " not a valid command" << endl;
+				}
 			}
 		}catch(runtime_error e){
 			cerr << e.what() << endl;
