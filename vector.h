@@ -109,7 +109,7 @@ namespace custom{
 				if (this->initialized){
 					return parent->at(this->pos);
 				}else{
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}
 			}
 		//******************
@@ -123,7 +123,7 @@ namespace custom{
 				if(this->initialized){
 					return &(this->parent->at(pos));
 				}else{
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}
 			}
 		//******************
@@ -145,9 +145,9 @@ namespace custom{
 		//		* Devuelve si ambos iteradores apuntan al mismo elemento
 			bool operator==(const iterator & newit){
 				if (!(this->initialized || newit.initialized)){
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}else if (this->parent != newit.parent){
-					throw std::runtime_error("Different iterator parents");
+					throw std::logic_error("Different iterator parents");
 				}else if (this->at_end && newit.at_end){
 					return true;
 				}else{
@@ -178,13 +178,13 @@ namespace custom{
 			void operator++(int){
 				if (this->initialized){
 					if (this->at_end){
-						throw std::runtime_error("Iterator at end");
+						throw std::logic_error("Iterator at end");
 					}else{
 						this->pos++;
 						this->at_end = (this->pos == this->parent->size());
 					}
 				}else{
-					throw std::runtime_error("Iterator not initialized");
+					throw std::logic_error("Iterator not initialized");
 				}
 			}
 		friend class vector;
@@ -222,7 +222,7 @@ namespace custom{
 			if (pos < this->Size){
 				return this->contents[pos];
 			}else{
-				throw std::runtime_error("Outside bonds");
+				throw std::out_of_range("Accessing element outside vector");
 			}
 		}
 	//******************
@@ -251,9 +251,9 @@ namespace custom{
 	//		* Reemplaza el arreglo almacenado por uno de mayor tamaño
 	//		* Copia los contenidos del viejo al nuevo
 	//		* Libera la memoria usada por el arreglo viejo
-		void change_capacity(unsigned long capacity){
+		void resize(unsigned long capacity){
 			if (this->capacity > capacity){
-				throw std::runtime_error("New capacity smaller than old");
+				throw std::length_error("New capacity smaller than old");
 			}else{
 				T * contents = new T[capacity];
 				for(unsigned long i = 0; i < this->Size; i++){
@@ -276,7 +276,7 @@ namespace custom{
 	//	de elementos, es posible que querramos almacenar n elementos más".
 		void push_back(const T & data){
 			if (this->Size == this->capacity){
-				this->change_capacity(this->capacity * 2);
+				this->resize(this->capacity * 2);
 			}
 			this->contents[this->Size] = data;
 			this->Size++;
@@ -292,7 +292,7 @@ namespace custom{
 			if (this->Size){
 				return this->contents[--(this->Size)];
 			}else{
-				throw std::runtime_error("Nothing to pop");
+				throw std::logic_error("Nothing to pop");
 			}
 		}
 	//******************
@@ -335,11 +335,11 @@ namespace custom{
 	//		* Agrega un nodo en la posición dada
 		void insert(const iterator & it, const T & data){
 			if (!it.initialized){
-				throw std::runtime_error("Iterator not initialized");
+				throw std::logic_error("Iterator not initialized");
 			}else if (it.parent != this){
-				throw std::runtime_error("Wrong iterator parent");
+				throw std::logic_error("Wrong iterator parent");
 			}else if (it.pos > this->Size){
-				throw std::runtime_error("Outside bonds");
+				throw std::out_of_range("Inserting element outside vector");
 			}else{
 				this->push_back(data);
 				for(unsigned long i = this->Size - 1; i > it.pos; i--){
