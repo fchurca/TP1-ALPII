@@ -49,7 +49,7 @@ void parser(istream & in, ostream & out, FSModel & model){
 				out
 					<< "Load finished: " << cron.getTiempoTranscurrido()
 					<< " ms" << endl
-					<< "Loaded " << mymodel.getsize()
+					<< "Loaded " << model.getsize()
 					<< " elements" << endl;
 			}else if (command == "maxsize"){
 				ss >> dump;
