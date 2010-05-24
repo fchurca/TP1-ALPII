@@ -19,7 +19,7 @@ namespace custom{
 //**************************************
 // custom::list
 //	Lista simplemente enlazada con punteros a primer y último elemento
-//	Clases propias:
+//	Structs propios:
 //		node		//	Nodo de almacenamiento
 //		iterator	//	Iterador progresivo
 //	Miembros:
@@ -40,10 +40,10 @@ namespace custom{
 	class list{
 	public:
 	//	Forward declaration
-		class iterator;
+		struct iterator;
 	protected:
 	//	Forward declaration
-		class node;
+		struct node;
 	// Cantidad de elementos guardados en el contenedor
 		unsigned long Size;
 	// Punteros a nodo
@@ -62,13 +62,12 @@ namespace custom{
 	//		Constructor por defecto
 	//		Constructor por inicialización de datos
 	//		Constructor copiador
-		class node{
+		struct node{
 		protected:
 		// Puntero al nodo siguiente en la lista. NULL si último elemento.
 			node * next;
 		// Datos almacenados en el nodo
 			T data;
-		public:
 		//******************
 		// Constructor por defecto
 		//	Precondiciones:
@@ -123,7 +122,7 @@ namespace custom{
 	//		Operador de igualdad
 	//		Operador de preincremento
 	//		Operador de postincremento
-		class iterator{
+		struct iterator{
 		// Puntero a contenedor padre (donde reside el nodo referido)
 			list * parent;
 		// Puntero al nodo referido
@@ -132,7 +131,6 @@ namespace custom{
 			bool at_end;
 		// Si el iterador fue inicializado o no
 			bool initialized;
-		public:
 		//******************
 		// Constructor por defecto
 		//	Precondiciones:
