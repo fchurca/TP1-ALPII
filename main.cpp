@@ -20,7 +20,7 @@ int main(int argc, char **argv){
 				cron.parar();
 				cout
 					<< "Load finished: " << cron.getTiempoTranscurrido()
-					<< " ms" << endl
+					<< " us" << endl
 					<< "Loaded " << mymodel.getsize()
 					<< " elements" << endl;
 			}catch(runtime_error e){
