@@ -1,119 +1,64 @@
-/******************************************************************************
-* Algoritmos y Programaci�n II - 75.41 *
-* C�tedra Ing. Patricia Calvo *
-* Facultad de Ingenier�a - Universidad de Buenos Aires *
-******************************************************************************/
-/* TDA Cronometro
-* Archivo : Cronometro.h
-* Versi�n : 1.0
-*/
+/*******************************************************************************
+ *	Cronometro.h
+ *	Librería de cronómetros con resolución de microsegundos
+ *	Implementación:	Martín Muñoz
+*******************************************************************************/
+
 #ifndef __CRONOMETRO_H__
 #define __CRONOMETRO_H__
+
+
+#include <stdio.h>
 #include <time.h>
-#include <sstream>
-/******************************************************************************/
-/* Definiciones de Tipos de Datos */
-/*--------------------------------*/
-/* Definici�n del TDA Cronometro */
+#include <sys/time.h>
+
 class Cronometro{
-    
 private:
-/******************************************************************************/
-/* Definicion de Atributos */
-/*--------------------------*/
-/* El atributo inicio guarda el tiempo en que se inicia el cronometro*/
-    clock_t inicio;
-/* El atributo cronometro guarda la suma de los intervalos de tiempo entre que se
-inicia el cronometro y se pausa, o se inicia y se detiene*/
-    long contador;
-/* El atributo pausado guarda el estado actual del cronometro, si esta pausado
-o no*/
-     bool pausado;
-/******************************************************************************/
-/* Definicion de Primitivas */
-/*--------------------------*/
-/*
-pre : ninguna.
-post: Crea un Cronometro inicializado en cero.
-*/
+	struct timeval
+		t_ini,
+		t_fin;
+	clock_t usecs;
+	bool pausado;
+	clock_t timeval_diff(struct timeval & a, struct timeval &b){
+		return
+			(a.tv_sec - b.tv_sec) * 1000000 +
+			(a.tv_usec - b.tv_usec);
+	};
 public:
-    
-Cronometro(){ iniciar();}
-    
-/*
-pre : el cronometro debe haber sido creado con el constructor.
-post: Borra todos los tiempos acumulados y estable el instante en que se
-comienza a contar el tiempo.
-*/
- 
-void iniciar(){
-    
-    contador = 0;
-    inicio = clock();
-    this->pausado = false;}
 
-/*
-pre : el cronometro debe haber sido creado con el constructor.
-post: Acumula el tiempo transcurrido desde la creacion, inicio o continuar
-(lo ultimo que haya pasado).
-*/
+	Cronometro(){
+		iniciar();
+	};
 
-void pausar(){
-    
-    clock_t fin;
-    fin = clock();
-    contador += fin - inicio;
-    this->pausado = true;}
-    
-/*
-pre : el cronometro debe haber sido creado con el constructor.
-post: Estable el instante a partir del cual se cuenta el tiempo.
-*/
+	void iniciar(){
+		this->usecs = 0;
+		pausado = false;
+		gettimeofday(&t_ini, NULL);
+	};
 
-void continuar(){
-    
-    if (this->pausado){
-    inicio = clock();
-    this->pausado = false;}
-}
+	void pausar(){
+		gettimeofday(&t_fin, NULL);
+		this->usecs += this->timeval_diff(this->t_fin, this->t_ini);
+		t_ini = t_fin;
+		pausado = true;
+	};
 
-/*
-pre : El cronometro debe haber sido creado con el constructor.
-post: Finaliza la cuenta y acumula todos los tiempos transcurridos.
-*/
+	void continuar(){
+		if (this->pausado){
+			gettimeofday(&t_ini, NULL);
+			this->pausado = false;
+		}
+	};
+	void parar(){
+		if (!this->pausado){
+			this->pausar();
+		}
+	};
 
-void parar(){
-    
-    if (!this->pausado){
-    this->pausar();
-    this->pausado = true;}
-}
-
-/*
-pre : El cronometro debe haber sido creado con el constructor.
-post: Devuelve una leyenda con los milisegundos que estan acumulados.
-*/
-
-std::string toString(){
-    
-    std::stringstream convertidor;
-    convertidor << this->contador;
-    return "Transcurrieron " + convertidor.str() + " milisegundos";}
-
-/*
-pre : El cronometro debe haber sido creado con el constructor.
-post: Devuelve la cantidad de milisegundos que estan acumulados.
-*/
-
-long getTiempoTranscurrido(){
-    
-    return this->contador;}
-    
+	clock_t getTiempoTranscurrido(){
+		return this->usecs;
+	};
 };
 
-#endif /* __CRONOMETRO_H__ */
 
-
-
-
-
+#endif	//	__CRONOMETRO_H__
