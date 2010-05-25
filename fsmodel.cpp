@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <cstring>
 
+#include <iostream>
+
 #include <stdexcept>
 
 //**************************************
@@ -33,7 +35,7 @@ unsigned long FSModel::load(const std::string & path){
 
 /* Set node path and add slash if missing. If on Microsoft Windows, the slash
 *	is mandatory too, since we are using a POSIX environment in the first place
-*	(Interix / SUA / GNUWin / Xming / Cygwin / MinGW)
+*	(Interix / GNUWin / Cygwin / MinGW)
 */	
 	curnode.path = path;
 	if (path[path.length() - 1] != '/'){
@@ -43,34 +45,38 @@ unsigned long FSModel::load(const std::string & path){
 	if (DIR * dirp = opendir(path.c_str())){
 		struct dirent *dp = NULL;
 		while (dp = readdir(dirp)){
-		// Load stats, name
-			curnode.name = dp->d_name;
-			curnode.load(curnode.path + curnode.name);
-		// Ignore self, parent
-			if (
-				(curnode.getname() != ".") &&
-				(curnode.getname() !=  "..") &&
-				(curnode.getname() != "./") &&
-				(curnode.getname() !=  "../")
-			){
-			// If node is a dir, load children
-				if (curnode.getisDirectory()){
-					localsize += curnode.size = this->load(curnode.fullname);
-				}
-			// Load node
-		// Ordered insertion
-				container::iterator inpoint = this->contents.begin();
-				for(
-					container::iterator end = this->contents.end();
-					inpoint != end;
-					inpoint++
+			try{
+			// Load stats, name
+				curnode.name = dp->d_name;
+				curnode.load(curnode.path + curnode.name);
+			// Ignore self, parent
+				if (
+					(curnode.getname() != ".") &&
+					(curnode.getname() !=  "..") &&
+					(curnode.getname() != "./") &&
+					(curnode.getname() !=  "../")
 				){
-					if (curnode.compare(*inpoint) < 0){
-						break;
+				// If node is a dir, load children
+					if (curnode.getisDirectory()){
+						localsize += curnode.size = this->load(curnode.fullname);
 					}
+				// Load node
+			// Ordered insertion
+					container::iterator inpoint = this->contents.begin();
+					for(
+						container::iterator end = this->contents.end();
+						inpoint != end;
+						inpoint++
+					){
+						if (curnode.compare(*inpoint) < 0){
+							break;
+						}
+					}
+					this->contents.insert(inpoint, curnode);
+					localsize++;
 				}
-				this->contents.insert(inpoint, curnode);
-				localsize++;
+			}catch (std::runtime_error e){
+				std::cerr << e.what() << std::endl;
 			}
 		}
 		closedir(dirp);
