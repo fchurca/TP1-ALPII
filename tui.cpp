@@ -49,7 +49,7 @@ minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
 				cron.parar();
 				out
 					<< "Load finished: " << cron.getTiempoTranscurrido()
-					<< " ms" << endl
+					<< " us" << endl
 					<< "Loaded " << model.getsize()
 					<< " elements" << endl;
 			}else if (command == "maxsize"){
@@ -64,7 +64,7 @@ minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
 				cron.parar();
 				out
 					<< "Search completed in "
-					<< cron.getTiempoTranscurrido() << " ms" << endl;
+					<< cron.getTiempoTranscurrido() << " us" << endl;
 			}else if (command == "status"){
 				out
 					<< "Path:\t\t\"" << model.getpath() << '\"' << endl
