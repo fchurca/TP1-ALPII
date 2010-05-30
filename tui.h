@@ -6,6 +6,10 @@
 
 #include <iostream>
 
-void parser(std::istream & in, std::ostream & out, FSModel & model);
+void parser(
+	std::istream & in, std::ostream & out,
+	FSModel & model,
+	bool showprompt = true
+);
 
 #endif	//	__TUI_H__

@@ -6,7 +6,11 @@
 
 using namespace std;
 
-void parser(istream & in, ostream & out, FSModel & model){
+void parser(
+	istream & in, ostream & out,
+	FSModel & model,
+	bool showprompt
+){
 	Cronometro cron;
 	string expression;
 	unsigned long
@@ -16,7 +20,9 @@ void parser(istream & in, ostream & out, FSModel & model){
 		try{
 			string dump, command;
 			stringstream ss;
-			out << "> ";
+			if(showprompt){
+				out << "> ";
+			}
 			getline(in, dump);
 			ss << dump;
 			ss >> command;
@@ -74,7 +80,7 @@ minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
 					<< "Maximum size:\t" << maxsize << endl;
 			}else{
 				if (command.length()){
-					out << command << " not a valid command" << endl;
+					out << command << ": command not found" << endl;
 				}
 			}
 		}catch(runtime_error e){

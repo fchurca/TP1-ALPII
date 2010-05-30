@@ -1,32 +1,35 @@
 #include "tui.h"
-
 #include "fsmodel.h"
 #include "Cronometro.h"
 
+#include <unistd.h>
+
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
 int main(int argc, char **argv){
 	int ret = EXIT_SUCCESS;
 	try{
+		stringstream ss;
 		FSModel mymodel;
-		Cronometro cron;
-		for (unsigned i = 1; i < argc; i++){
-			try{
-				cron.iniciar();
-				mymodel.load(argv[i]);
-				cron.parar();
-				cout
-					<< "Load finished: " << cron.getTiempoTranscurrido()
-					<< " us" << endl
-					<< "Loaded " << mymodel.getsize()
-					<< " elements" << endl;
-			}catch(runtime_error e){
-				cerr << e.what() << endl;
+		{
+			Cronometro cron;
+			for(int c; (c = getopt(argc, argv, "d:")) != -1; ){
+				try{
+					switch (c){
+					case 'd':
+						ss << "load " << optarg << endl;
+						break;
+					}
+				}catch(runtime_error e){
+					cerr << e.what() << endl;
+				}
 			}
 		}
+		parser(ss, cout, mymodel, false);
 		cout << "Type \"help\"<return> for help" << endl;
 		parser(cin, cout, mymodel);
 	}catch(logic_error e){
