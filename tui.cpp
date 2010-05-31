@@ -6,13 +6,24 @@
 
 using namespace std;
 
+string cleanup(string s){
+	if (
+		((s[0] == '"') && (s[s.length() - 1] == '"')) ||
+		((s[0] == '\'') && (s[s.length() - 1] == '\''))
+	){
+		s.erase(0, 1);
+		s.erase(s.length() - 1, 1);
+	}
+	return s;
+}
+
 void parser(
 	istream & in, ostream & out,
 	FSModel & model,
 	bool showprompt
 ){
 	Cronometro cron;
-	string expression;
+	string expression = "*";
 	unsigned long
 		minsize = 0,
 		maxsize = -1;
@@ -33,6 +44,7 @@ void parser(
 			}else if (command == "expr"){
 				ss >> ws;
 				getline(ss, expression);
+				expression = cleanup(expression);
 			}else if (command == "help"){
 				out << "\
 Command\tParameter\tDescription\n\
@@ -51,7 +63,7 @@ minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
 				getline(ss, dump);
 				model.clear();
 				cron.iniciar();
-				model.load(dump);
+				model.load(cleanup(dump));
 				cron.parar();
 				out
 					<< "Load finished: " << cron.getTiempoTranscurrido()
