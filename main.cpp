@@ -13,23 +13,20 @@ using namespace std;
 int main(int argc, char **argv){
 	int ret = EXIT_SUCCESS;
 	try{
-		stringstream ss;
+		stringstream inputscript;
 		FSModel mymodel;
-		{
-			Cronometro cron;
-			for(int c; (c = getopt(argc, argv, "d:")) != -1; ){
-				try{
-					switch (c){
-					case 'd':
-						ss << "load " << optarg << endl;
-						break;
-					}
-				}catch(runtime_error e){
-					cerr << e.what() << endl;
+		for(int c; (c = getopt(argc, argv, "d:")) != -1; ){
+			try{
+				switch (c){
+				case 'd':
+					inputscript << "load " << optarg << endl;
+					break;
 				}
+			}catch(runtime_error e){
+				cerr << e.what() << endl;
 			}
 		}
-		parser(ss, cout, mymodel, false);
+		parser(inputscript, cout, mymodel, false);
 		cout << "Type \"help\"<return> for help" << endl;
 		parser(cin, cout, mymodel);
 	}catch(logic_error e){
