@@ -1,3 +1,9 @@
+/*******************************************************************************
+ *	fsnode.h
+ *	Clase nodo de sistema de archivos
+ *	Implementación:               Federico Churca Torrusio (Padrón 91352)
+*******************************************************************************/
+
 #ifndef __FSNODE_H__
 #define __FSNODE_H__
 
@@ -13,6 +19,22 @@
 //	Translates a unsigned long size in bytes into STL string with binary powers
 std::string humansize(unsigned long size);
 
+//**************************************
+// FSMode
+//	Modelo de nodo de sistema de archivos
+//	Miembros:
+//		name		//	Nombre del nodo
+//		path		//	Ubicación del nodo
+//		fullname	//	Nombre completo del nodo
+//		isdir		//	Si el nodo es o no un directorio
+//		size		//	Cantidad de subelementos del directorio, o tamaño en
+//					//		bytes del archivo
+//		mtime		//	Fecha Unix de última modificación
+//	Métodos:
+//		Constructor por defecto
+//		Construtcores por filename
+//		Carga por filename
+//		Volcado de contenidos
 class FSNode{
 public:
 //**************************************
@@ -52,29 +74,6 @@ public:
 //	Dump contents to std::ostream out
 	void dump(std::ostream & out) const;
 
-//******************
-// compare(FSNode&)
-//	Determine which goes first in a list by path/type/name
-	char compare(FSNode & other);
-
-//******************
-// operator<(FSNode&)
-	bool operator<(FSNode & other){
-		return this->compare(other) < 0;
-	}
-
-//******************
-// operator>(FSNode&)
-	bool operator>(FSNode & other){
-		return this->compare(other) > 0;
-	}
-
-//******************
-// operator==(FSNode&)
-	bool operator==(FSNode & other){
-		return !(this->compare(other));
-	}
-
 //**************************
 // Getters
 
@@ -107,7 +106,7 @@ protected:
 	bool isdir;
 
 //******************
-// Sub(1)elements if directory, or size of the node in bytes if file
+// Subelements if directory, or size of the node in bytes if file
 	unsigned long size;
 
 //******************

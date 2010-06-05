@@ -90,13 +90,6 @@ void FSNode::dump(std::ostream & out) const{
 		<< this->fullname << std::endl;
 }
 
-//******************
-// compare(FSNode&)
-//	Determine which goes first in a list by path/type/name
-char FSNode::compare(FSNode & other){
-	return this->fullname.compare(other.fullname);
-}
-
 //**************************
 // Getters
 const std::string & FSNode::getname() const{
