@@ -52,9 +52,9 @@ unsigned long FSModel::load(const std::string & path){
 			// Ignore self, parent
 				if (
 					(curnode.getname() != ".") &&
-					(curnode.getname() !=  "..") &&
+					(curnode.getname() != "..") &&
 					(curnode.getname() != "./") &&
-					(curnode.getname() !=  "../")
+					(curnode.getname() != "../")
 				){
 				// If node is a dir, load children
 					if (curnode.getisDirectory()){
@@ -68,7 +68,7 @@ unsigned long FSModel::load(const std::string & path){
 						inpoint != end;
 						inpoint++
 					){
-						if (curnode.compare(*inpoint) < 0){
+						if (curnode.fullname < inpoint->fullname){
 							break;
 						}
 					}
