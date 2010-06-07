@@ -2,10 +2,10 @@
 # TPI: main binary
 
 TPIV: main.cpp expr.cpp fsmodel.cpp fsnode.cpp tui.cpp
-	c++ $? -g -o $@ -DFSMODEL_VECTOR
+	c++ $? -g -o TPI -DFSMODEL_VECTOR
 
 TPIL: main.cpp expr.cpp fsmodel.cpp fsnode.cpp tui.cpp
-	c++ $? -g -o $@ -DFSMODEL_LIST
+	c++ $? -g -o TPI -DFSMODEL_LIST
 
 ####################################
 # expr: expression matcher
@@ -55,6 +55,6 @@ DLfsmodel: fsmodel.cpp fsnode.cpp expr.cpp
 # clean: remove all binaries
 #	Add specific bin names here
 clean:
-	rm -f TPIV TPIL Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
+	rm -f TPI Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
 
 .PHONY: clean
