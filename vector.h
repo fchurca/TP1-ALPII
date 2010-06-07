@@ -162,8 +162,9 @@ namespace custom{
 		//		* El iterador avanza al próximo nodo
 		//		* Retorna una referencia al iterador, que ahora apunta al
 		//	próximo nodo
-			void operator++(){
+			iterator & operator++(){
 				(*this)++;
+				return *this;
 			}
 		//******************
 		// Operador de postincremento
@@ -174,7 +175,8 @@ namespace custom{
 		//		* El iterador avanza al próximo nodo
 		//		* Retorna una referencia al iterador, que ahora apunta al
 		//	próximo nodo
-			void operator++(int){
+			iterator operator++(int){
+				iterator ret = *this;
 				if (this->initialized){
 					if (this->at_end){
 						throw std::logic_error("Iterator at end");
@@ -185,6 +187,7 @@ namespace custom{
 				}else{
 					throw std::logic_error("Iterator not initialized");
 				}
+				return ret;
 			}
 		friend class vector;
 		};

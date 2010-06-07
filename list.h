@@ -9,6 +9,7 @@
 #define __LIST_H__
 
 #include <cstdlib>
+
 #include <stdexcept>
 
 //**********************************************************
@@ -231,7 +232,8 @@ namespace custom{
 		//		* El iterador avanza al próximo nodo
 		//		* Retorna una referencia al iterador, que ahora apunta al
 		//	próximo nodo
-			iterator & operator++(int){
+			iterator operator++(int){
+				iterator ret = *this;
 				if (this->initialized){
 					if (this->at_end){
 						throw std::logic_error("Iterator at end");
@@ -244,7 +246,7 @@ namespace custom{
 				}else{
 					throw std::logic_error("Iterator not initialized");
 				}
-				return *this;
+				return ret;
 			}
 		friend class list;
 		};
