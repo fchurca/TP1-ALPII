@@ -15,20 +15,33 @@ int main(int argc, char **argv){
 	try{
 		stringstream inputscript;
 		FSModel mymodel;
-		for(int c; (c = getopt(argc, argv, "d:")) != -1; ){
+		bool helped = false;
+		for(int c; (c = getopt(argc, argv, "d:h")) != -1; ){
 			try{
 				switch (c){
 				case 'd':
 					inputscript << "load " << optarg << endl;
+					break;
+				case 'h':
+					if (!helped){
+						string usage(contents("usage"));
+						helped = true;
+						cout << usage;
+					}
 					break;
 				}
 			}catch(runtime_error e){
 				cerr << e.what() << endl;
 			}
 		}
-		parser(inputscript, cout, mymodel, false);
-		cout << "Type \"help\"<return> for help" << endl;
-		parser(cin, cout, mymodel);
+		if (!helped){
+			parser(inputscript, cout, mymodel, false);
+			cout << "Type \"help\"<return> for help" << endl;
+			parser(cin, cout, mymodel);
+		}
+	}catch(runtime_error e){
+		cerr << e.what() << endl << "Aborting" << endl;
+		ret = EXIT_FAILURE;
 	}catch(logic_error e){
 		cerr << e.what() << endl << "Aborting" << endl;
 		ret = EXIT_FAILURE;

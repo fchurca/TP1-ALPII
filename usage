@@ -1,0 +1,4 @@
+Usage: TPI [OPTION...]
+
+  -d            load DIRECTORY on startup
+  -h            display this help and exit
