@@ -1,12 +1,32 @@
 #include "tui.h"
 #include "Cronometro.h"
 
+#include <climits>
+
+#include <stdexcept>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 
-string cleanup(string s){
+std::string contents(std::string file){
+	string ret;
+	ifstream infile(file.c_str());
+	string dump;
+	if (!infile){
+		throw runtime_error(file + " not found");
+	}
+	while (infile){
+		getline(infile, dump);
+		if (infile){
+			ret += dump + '\n';
+		}
+	}
+	return ret;
+}
+
+std::string cleanup(std::string s){
 	if (
 		((s[0] == '"') && (s[s.length() - 1] == '"')) ||
 		((s[0] == '\'') && (s[s.length() - 1] == '\''))
@@ -22,11 +42,12 @@ void parser(
 	FSModel & model,
 	bool showprompt
 ){
+	string S_help(contents("help"));
 	Cronometro cron;
 	string expression = "*";
-	unsigned long
+	unsigned long long
 		minsize = 0,
-		maxsize = -1;
+		maxsize = ULLONG_MAX;
 	while (in){	
 		try{
 			string dump, command;
@@ -46,18 +67,7 @@ void parser(
 				getline(ss, expression);
 				expression = cleanup(expression);
 			}else if (command == "help"){
-				out << "\
-Command\tParameter\tDescription\n\
-dump\t(none)\t\tDump directory contents\n\
-exit\t(none)\t\tExit the program\n\
-help\t(none)\t\tShow help\n\
-search\t(none)\t\tShow matching fles\n\
-status\t(none)\t\tShow current search criteria\n\
-expr\texpression\tSave search expression\n\
-load\tdirectory\tLoad directory contents\n\
-maxsize\tsize\t\tMaximum file size in bytes (-1 for no restriction)\n\
-minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
-";
+				out << S_help;
 			}else if (command == "load"){
 				ss >> ws;
 				getline(ss, dump);
@@ -76,6 +86,10 @@ minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
 			}else if (command == "minsize"){
 				ss >> dump;
 				minsize = atol(dump.c_str());
+			}else if (command == "nomax"){
+				maxsize = ULLONG_MAX;
+			}else if (command == "nomin"){
+				minsize = 0;
 			}else if (command == "search"){
 				cron.iniciar();
 				model.search(out, expression, maxsize, minsize);
@@ -88,8 +102,19 @@ minsize\tsize\t\tMinimum file size in bytes (0 for no restriction)\n\
 					<< "Path:\t\t\"" << model.getpath() << '\"' << endl
 					<< "Total files:\t" << model.getsize() << endl
 					<< "Expression:\t\"" << expression << '\"' << endl
-					<< "Minimum size:\t" << minsize << endl
-					<< "Maximum size:\t" << maxsize << endl;
+					<< "Minimum size:\t";
+				if (minsize){
+					out << minsize;
+				}else{
+					out << "(none)";
+				}
+				out << endl << "Maximum size:\t";
+				if (maxsize < ULLONG_MAX) {
+					out << maxsize << endl;
+				}else{
+					out << "(none)";
+				}
+				out << endl;
 			}else{
 				if (command.length()){
 					out << command << ": command not found" << endl;

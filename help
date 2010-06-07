@@ -1,0 +1,12 @@
+Command	Parameter	Description
+dump	(none)		Dump directory contents
+exit	(none)		Exit the program
+help	(none)		Show help
+search	(none)		Show matching fles
+status	(none)		Show current search criteria
+expr	expression	Save search expression
+load	directory	Load directory contents
+maxsize	size		Maximum file size in bytes
+minsize	size		Minimum file size in bytes
+nomax	(none)		Remove maximum file size limit
+nomin	(none)		Remove minimum file size limit
