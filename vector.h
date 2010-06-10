@@ -65,7 +65,8 @@ namespace custom{
 	//		Operador de igualdad
 	//		Operador de preincremento
 	//		Operador de postincremento
-		struct iterator{
+		class iterator{
+		public:
 		// Puntero a contenedor padre (donde reside el nodo referido)
 			vector * parent;
 		// Índice al nodo referido
@@ -74,6 +75,7 @@ namespace custom{
 			bool at_end;
 		// Si el iterador fue inicializado o no
 			bool initialized;
+		public:
 		//******************
 		// Constructor por defecto
 		//	Precondiciones:

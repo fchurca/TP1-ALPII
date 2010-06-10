@@ -41,10 +41,10 @@ namespace custom{
 	class list{
 	public:
 	//	Forward declaration
-		struct iterator;
+		class iterator;
 	protected:
 	//	Forward declaration
-		struct node;
+		class node;
 	// Cantidad de elementos guardados en el contenedor
 		unsigned long Size;
 	// Punteros a nodo
@@ -63,11 +63,13 @@ namespace custom{
 	//		Constructor por defecto
 	//		Constructor por inicialización de datos
 	//		Constructor copiador
-		struct node{
+		class node{
+		public:
 		// Puntero al nodo siguiente en la lista. NULL si último elemento.
 			node * next;
 		// Datos almacenados en el nodo
 			T data;
+		public:
 		//******************
 		// Constructor por defecto
 		//	Precondiciones:
@@ -122,7 +124,8 @@ namespace custom{
 	//		Operador de igualdad
 	//		Operador de preincremento
 	//		Operador de postincremento
-		struct iterator{
+		class iterator{
+		public:
 		// Puntero a contenedor padre (donde reside el nodo referido)
 			list * parent;
 		// Puntero al nodo referido
@@ -131,6 +134,7 @@ namespace custom{
 			bool at_end;
 		// Si el iterador fue inicializado o no
 			bool initialized;
+		public:
 		//******************
 		// Constructor por defecto
 		//	Precondiciones:
@@ -239,7 +243,7 @@ namespace custom{
 						throw std::logic_error("Iterator at end");
 					}else{
 						this->pos = this->pos->next;
-						if (this->pos == this->parent->last){
+						if (!(this->pos)){
 							this->at_end = true;
 						}
 					}
