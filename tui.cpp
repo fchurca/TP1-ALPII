@@ -10,7 +10,7 @@
 
 using namespace std;
 
-std::string contents(std::string file){
+std::string contents(const std::string & file){
 	string ret;
 	ifstream infile(file.c_str());
 	string dump;
@@ -42,15 +42,19 @@ void parser(
 	FSModel & model,
 	bool showprompt
 ){
-	string S_help(contents("help"));
+	static string S_help(contents("help"));
 	Cronometro cron;
-	string expression = "*";
+	static string
+		expression = "*",
+		logfilename;
 	unsigned long long
 		minsize = 0,
 		maxsize = ULLONG_MAX;
 	while (in){	
 		try{
-			string dump, command;
+			string
+				dump,
+				command;
 			stringstream ss;
 			if(showprompt){
 				out << "> ";
@@ -80,12 +84,18 @@ void parser(
 					<< " us" << endl
 					<< "Loaded " << model.getsize()
 					<< " elements" << endl;
+			}else if (command == "logfile"){
+				ss >> ws;
+				getline(ss, logfilename);
+				logfilename = cleanup(logfilename);
 			}else if (command == "maxsize"){
-				ss >> dump;
-				maxsize = atol(dump.c_str());
+				ss >> maxsize;
 			}else if (command == "minsize"){
-				ss >> dump;
-				minsize = atol(dump.c_str());
+				ss >> minsize;
+			}else if (command == "noexpr"){
+				expression = "*";
+			}else if (command == "nolog"){
+				logfilename.clear();
 			}else if (command == "nomax"){
 				maxsize = ULLONG_MAX;
 			}else if (command == "nomin"){
@@ -110,7 +120,13 @@ void parser(
 				}
 				out << endl << "Maximum size:\t";
 				if (maxsize < ULLONG_MAX) {
-					out << maxsize << endl;
+					out << maxsize;
+				}else{
+					out << "(none)";
+				}
+				out << endl << "Log file:\t";
+				if (logfilename.length()){
+					out << '\"' << logfilename << '\"';
 				}else{
 					out << "(none)";
 				}

@@ -16,18 +16,25 @@ int main(int argc, char **argv){
 		stringstream inputscript;
 		FSModel mymodel;
 		bool helped = false;
-		for(int c; (c = getopt(argc, argv, "d:h")) != -1; ){
+		for(int c; !helped && ((c = getopt(argc, argv, "d:e:so:h")) != -1); ){
 			try{
 				switch (c){
 				case 'd':
 					inputscript << "load " << optarg << endl;
 					break;
+				case 'e':
+					inputscript << "expr " << optarg << endl;
+					break;
+				case 's':
+					inputscript << "search" << endl;
+					break;
+				case 'o':
+					inputscript << "logfile " << optarg << endl;
+					break;
 				case 'h':
-					if (!helped){
-						string usage(contents("usage"));
-						helped = true;
-						cout << usage;
-					}
+					string usage(contents("usage"));
+					helped = true;
+					cout << usage;
 					break;
 				}
 			}catch(runtime_error e){

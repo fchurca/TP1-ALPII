@@ -1,4 +1,7 @@
 Usage: TPI [OPTION...]
 
   -d            load DIRECTORY on startup
+  -e            use EXPRESSION as search expression
+  -s            perform a search
+  -o            copy log to FILENAME
   -h            display this help and exit

@@ -6,7 +6,10 @@ search	(none)		Show matching fles
 status	(none)		Show current search criteria
 expr	expression	Save search expression
 load	directory	Load directory contents
+logfile	filename	Copy log to filename
 maxsize	size		Maximum file size in bytes
 minsize	size		Minimum file size in bytes
-nomax	(none)		Remove maximum file size limit
-nomin	(none)		Remove minimum file size limit
+noexpr	(none)		Remove expression as a criterion
+nolog	(none)		Disable log
+nomax	(none)		Remove maximum file size criterion
+nomin	(none)		Remove minimum file size criterion
