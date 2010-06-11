@@ -1,11 +1,11 @@
 /*******************************************************************************
- *	fsnode.h
+ *	FModel.h
  *	Clase nodo de sistema de archivos
  *	Implementación:               Federico Churca Torrusio (Padrón 91352)
 *******************************************************************************/
 
-#ifndef __FSNODE_H__
-#define __FSNODE_H__
+#ifndef __FMODEL_H__
+#define __FMODEL_H__
 
 #include <sys/stat.h>
 
@@ -35,27 +35,27 @@ std::string humansize(unsigned long size);
 //		Construtcores por filename
 //		Carga por filename
 //		Volcado de contenidos
-class FSNode{
+class FModel{
 public:
 //**************************************
 // Methods
 
 //******************
-// FSNode()
+// FModel()
 //	Zeroing default constructor
-	FSNode();
+	FModel();
 
 //******************
-// FSNode(const char * path)
+// FModel(const char * path)
 //	Load node information
 //	May throw runtime_error if path is unreachable
-	FSNode(const char * path);
+	FModel(const char * path);
 
 //******************
-// FSNode(const std::string & path)
+// FModel(const std::string & path)
 //	Wrap to cstring version
 //	May throw runtime_error if path is unreachable
-	FSNode(const std::string & path);
+	FModel(const std::string & path);
 
 //******************
 // load(const char *)
@@ -123,4 +123,4 @@ protected:
 friend class FSModel;
 };
 
-#endif	// __FSNODE_H__
+#endif	// __FModel_H__

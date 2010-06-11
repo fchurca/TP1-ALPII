@@ -20,16 +20,5 @@ namespace custom {
 			to_add._data = data;
 			this->_children.push_back(to_add);
 		}
-/*		unsigned size(){
-			unsigned ret = 1;
-			list<tree>::iterator
-				it = this->children().begin(),
-				end = 	this->children().end();
-			while(it != end){
-				ret += it->size();
-				it++;
-			}
-			return ret;
-		}
-*/	};
+	};
 }

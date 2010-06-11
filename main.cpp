@@ -1,9 +1,10 @@
 #include "tui.h"
-#include "fsmodel.h"
+#include "FSModel.h"
 #include "Cronometro.h"
 
 #include <unistd.h>
 
+#include <cstdlib>
 #include <stdexcept>
 #include <iostream>
 #include <sstream>

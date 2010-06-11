@@ -5,7 +5,7 @@
 	#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
 #else
 
-#include "fsnode.h"
+#include "FModel.h"
 
 #include <ostream>
 
@@ -16,18 +16,18 @@
 #if defined(FSMODEL_STD)
 	#if defined(FSMODEL_VECTOR)
 		#include <vector>
-		typedef std::vector<FSNode> container;
+		typedef std::vector<FModel> container;
 	#elif defined(FSMODEL_LIST)
 		#include <list>
-		typedef std::list<FSNode> container;
+		typedef std::list<FModel> container;
 	#endif
 #else
 	#if defined(FSMODEL_VECTOR)
 		#include "vector.h"
-		typedef custom::vector<FSNode> container;
+		typedef custom::vector<FModel> container;
 	#elif defined(FSMODEL_LIST)
 		#include "list.h"
-		typedef custom::list<FSNode> container;
+		typedef custom::list<FModel> container;
 	#endif
 #endif
 class FSModel{

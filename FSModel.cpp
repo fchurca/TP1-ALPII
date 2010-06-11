@@ -1,4 +1,4 @@
-#include "fsmodel.h"
+#include "FSModel.h"
 #include "expr.h"
 
 #include <dirent.h>
@@ -31,7 +31,7 @@ FSModel::FSModel(const std::string & path){
 unsigned long FSModel::load(const std::string & path){
 // Will return amount of sub(all)elements
 	unsigned long localsize = 0;
-	FSNode curnode;
+	FModel curnode;
 
 /* Set node path and add slash if missing. If on Microsoft Windows, the slash
 *	is mandatory too, since we are using a POSIX environment in the first place

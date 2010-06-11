@@ -1,8 +1,7 @@
 #ifndef __TUI_H__
 #define __TUI_H__
 
-#include "fsmodel.h"
-#include "Cronometro.h"
+#include "FSModel.h"
 
 #include <string>
 #include <iostream>

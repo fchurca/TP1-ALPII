@@ -1,4 +1,4 @@
-#include "fsnode.h"
+#include "FModel.h"
 
 #include <sys/stat.h>
 #include <dirent.h>
@@ -8,35 +8,35 @@
 #include <sstream>
 
 //**************************************
-// FSNode methods
+// FModel methods
 
 //******************
-// FSNode()
+// FModel()
 //	Zeroing default constructor
-FSNode::FSNode(){
+FModel::FModel(){
 	this->isdir = false;
 	this-> size = 0;
 	this-> mtime = 0;
 }
 
 //******************
-// FSNode(const char * path)
+// FModel(const char * path)
 //	Load node information
-FSNode::FSNode(const char * path){
+FModel::FModel(const char * path){
 	this->load(path);
 }
 
 //******************
-// FSNode(const std::string & path)
+// FModel(const std::string & path)
 //	Wrap to cstring version
-FSNode::FSNode(const std::string & path){
+FModel::FModel(const std::string & path){
 	this->load(path.c_str());
 }
 
 //******************
 // load(const char *)
 //	Load node information
-void FSNode::load(const char * path){
+void FModel::load(const char * path){
 // Set full name
 	this->fullname = path;
 // Load POSIX node info
@@ -70,14 +70,14 @@ void FSNode::load(const char * path){
 //******************
 // load(const std::string &)
 //	Wrap to cstring version
-void FSNode::load(const std::string & path){
+void FModel::load(const std::string & path){
 	this->load(path.c_str());
 }
 
 //******************
 // dump(std::ostream&)
 //	Dump contents, to std::ostream out
-void FSNode::dump(std::ostream & out) const{
+void FModel::dump(std::ostream & out) const{
 	out
 		<< (this->isdir? "dir  " : "file ");
 	if (this->getisDirectory()){
@@ -92,27 +92,27 @@ void FSNode::dump(std::ostream & out) const{
 
 //**************************
 // Getters
-const std::string & FSNode::getname() const{
+const std::string & FModel::getname() const{
 	return this->name;
 }
-const std::string & FSNode::getpath() const{
+const std::string & FModel::getpath() const{
 	return this->path;
 }
-std::string FSNode::getfullname() const{
+std::string FModel::getfullname() const{
 	return this->fullname;
 }
-bool FSNode::getisDirectory() const{
+bool FModel::getisDirectory() const{
 	return this->isdir;
 }
-time_t FSNode::getmtime() const{
+time_t FModel::getmtime() const{
 	return this->mtime;
 }
-std::string FSNode::getCmtime() const{
+std::string FModel::getCmtime() const{
 	std::string aux = ctime(&this->mtime);
 	aux.erase(aux.length() - 1);
 	return aux;
 }
-unsigned long FSNode::getsize() const{
+unsigned long FModel::getsize() const{
 	return this->size;
 }
 
@@ -131,7 +131,7 @@ std::string humansize(unsigned long size){
 	return ss.str();
 }
 
-#ifdef FSNODE_DEBUG
+#ifdef FModel_DEBUG
 
 #include <iostream>
 using namespace std;
@@ -141,7 +141,7 @@ int main(int argc, char **argv){
 	if (argc > 1){
 		for (unsigned long i = 1; i < argc; i++){
 			try{
-				FSNode node(argv[i]);
+				FModel node(argv[i]);
 				node.dump(cout);
 			}catch(runtime_error e){
 				cerr << e.what() << endl;
@@ -153,4 +153,4 @@ int main(int argc, char **argv){
 	return ret;
 }
 
-#endif	// FSNODE_DEBUG
+#endif	// FModel_DEBUG
