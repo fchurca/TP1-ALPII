@@ -22,6 +22,6 @@ Dexpr: expr.cpp
 # clean: remove all binaries
 #	Add specific bin names here
 clean:
-	rm -f TPI Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
+	rm -f TPIV TPIL Dexpr Dfsnode DVfsmodel DLfsmodel *.o *~
 
 .PHONY: clean
