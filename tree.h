@@ -6,6 +6,7 @@
 # include "list.h"
 namespace custom {
 	template<typename T> class tree{
+	protected:
 		T _data;
 		list<tree> _children; 
 	public:
