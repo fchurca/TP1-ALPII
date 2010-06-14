@@ -156,9 +156,11 @@ ECHO.
 
 :makegen
 
-DEL  *.exe *.o
+DEL *.exe *.o
 c++ main.cpp expr.cpp FSMoDEL.cpp FMoDEL.cpp tui.cpp -g -o TPIL -DFSMODEL_LIST
+DEL *.o
 c++ main.cpp expr.cpp FSMoDEL.cpp FMoDEL.cpp tui.cpp -g -o TPIV -DFSMODEL_VECTOR
+DEL *.o
 c++ main.cpp expr.cpp fsmoDEL.cpp fsnode.cpp tui.cpp -g -o TPIA -DFSMODEL_ARBOL
 ECHO Se han regenerado todos los ejecutables.
 ECHO.
