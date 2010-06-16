@@ -1,9 +1,13 @@
 /*******************************************************************************
- *	list.h
+ *	tree.h
  *	Librería de árbol n-ario
  *	Implementación de árbol:      Fiona González Lisella (Padrón 91454)
 *******************************************************************************/
-# include "list.h"
+//# include "list.h"
+#include <list>
+
+using namespace std;
+
 namespace custom {
 	template<typename T> class tree{
 		T _data;
