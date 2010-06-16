@@ -10,6 +10,7 @@ using namespace std;
 
 namespace custom {
 	template<typename T> class tree{
+	protected:
 		T _data;
 		list<tree> _children; 
 	public:

@@ -369,13 +369,15 @@ namespace custom{
 	//		* El iterador debe pertenecer a el contenedor en cuestión
 	//	Postcondiciones:
 	//		* Agrega un nodo en la posición dada
-		void insert(const iterator & it, const T & data){
+		void insert(iterator & it, const T & data){
 			if (!it.initialized){
 				throw std::logic_error("Iterator not initialized");
 			}else if (it.parent != this){
 				throw std::logic_error("Wrong iterator parent");
 			}else if (it.at_end || ! this->Size){
 				push_back(data);
+				it.pos = this->last;
+				it.at_end = false;
 			}else if (it.pos == this->first || ! it.pos){
 				this->Size++;
 				node * to_add = new node(data, this->first);
