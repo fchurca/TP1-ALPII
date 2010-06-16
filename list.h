@@ -270,7 +270,7 @@ namespace custom{
 	//		(ninguna)
 	//	Postcondiciones:
 	//		* La lista está vacía
-		~list(){
+		virtual ~list(){
 			this->clear();
 		};
 	//******************
@@ -290,7 +290,7 @@ namespace custom{
 	//		* Quita todos los elementos de la lista
 	//		* Establece el tamaño en cero
 		void clear(){
-			while(this->first){
+			while(this->size()){
 				this->pop_front();
 			}
 		}
