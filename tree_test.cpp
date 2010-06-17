@@ -9,7 +9,7 @@
 
 using namespace custom;
 using namespace std;
-class FSModel : public tree<FModel>{
+class FSModel{
 	tree<FModel> contents;
 public:
 	unsigned _load(const std::string & path, tree<FModel> & here){
@@ -22,10 +22,10 @@ public:
 			}
 			here.data().size = 0;
 			struct dirent *dp = NULL;
+			FModel curnode;
+			curnode.path = here.data().fullname;
 			while (dp = readdir(dirp)){
 				try{
-					FModel curnode;
-					curnode.path = here.data().fullname;
 					curnode.name = dp->d_name;
 					curnode.load(curnode.path + curnode.name);
 				// Ignore self, parent
@@ -35,21 +35,8 @@ public:
 						(curnode.getname() != "./") &&
 						(curnode.getname() != "../")
 					){
-						tree<FModel> empty;
-				// Ordered insertion
-/*						list<tree<FModel> >::iterator inpoint = here.children().begin();
-						for(
-							list<tree<FModel> >::iterator end = here.children().end();
-							inpoint != end;
-							inpoint++
-						){
-							if (curnode.fullname < inpoint->data().fullname){
-								break;
-							}
-						}
-*/
 						list<tree<FModel> >::iterator inpoint = here.children().begin();
-						here.children().insert(inpoint, empty);
+						here.children().insert(inpoint, tree<FModel>());
 						inpoint = here.children().begin();
 						here.data().size += this->_load(curnode.fullname, *inpoint);
 					}
@@ -63,37 +50,36 @@ public:
 		return ret;
 	}
 	unsigned load(const std::string & path){
-		this->_load(path, this->contents);
-		return 0;
+		return this->_load(path, this->contents);
 	}
-	unsigned dump(std::ostream & out, bool verbose = true){
-		if (verbose){
-			out
-				<< "Contents of " << this->data().path << std::endl
-				<< "Type Size\tDate                     Name" << std::endl;
-		}
-		unsigned ret = 1;
-		this->data().dump(out);
-		list<tree<FModel> >::iterator
-			it = this->contents.children().begin(),
-			end = this->contents.children().end();
-		while(it != end){
+	unsigned _dump(std::ostream & out,  tree<FModel> & here){list<tree<FModel> >::iterator inpoint = here.children().begin();
+		unsigned ret = 0;
+		list<tree<FModel> >::iterator it = here.children().begin();
+		for(
+			list<tree<FModel> >::iterator end = here.children().end();
+			it != end;
+			it++
+		){
 			it->data().dump(out);
 			ret++;
-			it++;
+			ret += this->_dump(out, *it);
 		}
-		if (verbose){
-			out << "Total: " << this->contents.data().size << " elements" << std::endl;
-		}
+		return ret;
+	}
+	unsigned dump(std::ostream & out){
+		out
+			<< "Contents of " << this->contents.data().path << std::endl
+			<< "Type Size\tDate                     Name" << std::endl;
+		unsigned ret = this->_dump(out, this->contents);
+		out << "Total: " << ret << " elements" << std::endl;
 		return ret;
 	}
 };
 
 int main(int argc, char **argv){
 	FSModel arbol;
-	arbol.load(".");
+	arbol.load(argv[1]);
 	arbol.dump(cout);
-	cout << "WARGBL"<< endl;
 	return EXIT_SUCCESS;
 }
 
