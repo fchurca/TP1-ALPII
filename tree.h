@@ -3,8 +3,7 @@
  *	Librería de árbol n-ario
  *	Implementación de árbol:      Fiona González Lisella (Padrón 91454)
 *******************************************************************************/
-//# include "list.h"
-#include <list>
+# include "list.h"
 
 using namespace std;
 
