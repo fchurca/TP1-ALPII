@@ -264,6 +264,11 @@ namespace custom{
 			this->first = this->last = NULL;
 			this->Size = 0;
 		}
+	// DUMMY COPYING CONSTRUCTOR
+		list(const list<T> & L){
+			this->first = this->last = NULL;
+			this->Size = 0;
+		}
 	//******************
 	// Destructor
 	//	Precondiciones:
@@ -290,7 +295,7 @@ namespace custom{
 	//		* Quita todos los elementos de la lista
 	//		* Establece el tamaño en cero
 		void clear(){
-			while(this->size()){
+			while(this->size() > 0){
 				this->pop_front();
 			}
 		}
@@ -319,7 +324,7 @@ namespace custom{
 	//		* Quita un elemento del inicio de la lista
 	//		* Decrementa el tamaño en un elemento menos
 		T pop_front(){
-			if (this->first){
+			if (this->size() > 0){
 				T ret = this->first->data;
 				node * aux = this->first;
 				this->first = this->first->next;
