@@ -295,9 +295,11 @@ namespace custom{
 	//		* Quita todos los elementos de la lista
 	//		* Establece el tamaño en cero
 		void clear(){
-			while(this->size() > 0){
-				this->pop_front();
+			while(node* to_remove = this->first){
+				this->first = this->first->next;
+				delete to_remove;
 			}
+			this->Size = 0;
 		}
 	//******************
 	// Agregar al final de la lista
