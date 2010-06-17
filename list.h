@@ -393,8 +393,9 @@ namespace custom{
 					this->last = to_add;
 				}
 			}else{
+			// TODO: UNBORK
 				this->Size++;
-				node * to_add = new node(*it.pos);
+				node * to_add = new node(it.pos->data, it.pos->next);
 				it.pos->next = to_add;
 				it.pos->data = data;
 			}
