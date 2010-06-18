@@ -1,3 +1,4 @@
+#include "expr.h"
 #include "tree.h"
 #include "FModel.h"
 
@@ -11,7 +12,6 @@ using namespace custom;
 using namespace std;
 class FSModel{
 	tree<FModel> contents;
-public:
 	unsigned _load(const std::string & path, tree<FModel> & here){
 		unsigned ret = 1;
 		here.data().load(path);
@@ -39,6 +39,7 @@ public:
 						here.children().insert(inpoint, tree<FModel>());
 						inpoint = here.children().begin();
 						here.data().size += this->_load(curnode.fullname, *inpoint);
+						inpoint->data().name = curnode.name;
 					}
 				}catch (std::runtime_error e){
 					std::cerr << e.what() << std::endl;
@@ -49,10 +50,7 @@ public:
 		}
 		return ret;
 	}
-	unsigned load(const std::string & path){
-		return this->_load(path, this->contents);
-	}
-	unsigned _dump(std::ostream & out,  tree<FModel> & here){list<tree<FModel> >::iterator inpoint = here.children().begin();
+	unsigned _dump(std::ostream & out,  tree<FModel> & here){
 		unsigned ret = 0;
 		list<tree<FModel> >::iterator it = here.children().begin();
 		for(
@@ -66,6 +64,43 @@ public:
 		}
 		return ret;
 	}
+	unsigned _search(
+		std::ostream & out, const std::string & expression,
+		unsigned long maxsize, unsigned long minsize,
+		tree<FModel> & here
+	){
+		unsigned ret = 0;
+		list<tree<FModel> >::iterator it = here.children().begin();
+		for(
+			list<tree<FModel> >::iterator end = here.children().end();
+			it != end;
+			it++
+		){
+			if (
+			// Should match expression
+				MatchesExpression(expression, it->data().getname()) && (
+				// Match all dirs
+					it->data().getisDirectory() || (
+					// Files should have a size between, and including, min and max
+						(it->data().getsize() <= maxsize) &&
+						(it->data().getsize() >= minsize)
+					)
+				)
+			){
+				it->data().dump(out);
+				ret++;
+			}
+			ret += this->_search(out, expression, maxsize, minsize, *it);
+		}
+		return ret;
+	}
+public:
+	void clear(){
+		this->contents.clear();
+	}
+	unsigned load(const std::string & path){
+		return this->_load(path, this->contents);
+	}
 	unsigned dump(std::ostream & out){
 		out
 			<< "Contents of " << this->contents.data().path << std::endl
@@ -74,12 +109,26 @@ public:
 		out << "Total: " << ret << " elements" << std::endl;
 		return ret;
 	}
+	void search(
+		std::ostream & out, const std::string & expression,
+		unsigned long maxsize = -1, unsigned long minsize = 0
+	){
+		out
+			<< "Contents of " << this->contents.data().path << std::endl
+			<< "Total: " << this->contents.data().getsize() << " elements" << std::endl
+			<< "Type Size\tDate                     Name" << std::endl;
+		unsigned long found = _search(out, expression, maxsize, minsize, this->contents);
+		out <<
+			"Searching for \"" << expression << "\" in \"" << this->contents.data().fullname
+			<< "\" turned out  " << found << " results" << std::endl;
+	}
 };
 
 int main(int argc, char **argv){
 	FSModel arbol;
 	arbol.load(argv[1]);
 	arbol.dump(cout);
+	arbol.search(cout, "*ETAL*");
 	return EXIT_SUCCESS;
 }
 
