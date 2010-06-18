@@ -19,6 +19,9 @@ namespace custom {
 		list<tree> & children(){
 			return this->_children;
 		}
+		void clear(){
+			this->children().clear();
+		}
 		void add_child(const T& data){
 			tree to_add;
 			to_add._data = data;
