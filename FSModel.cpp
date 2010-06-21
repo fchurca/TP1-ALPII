@@ -63,15 +63,15 @@ unsigned long FSModel::load(const std::string & path){
 				// Load node
 			// Ordered insertion
 					container::iterator inpoint = this->contents.begin();
-//					for(
-//						container::iterator end = this->contents.end();
-//						inpoint != end;
-//						inpoint++
-//					){
-//						if (curnode.fullname < inpoint->fullname){
-//							break;
-//						}
-//					}
+					for(
+						container::iterator end = this->contents.end();
+						inpoint != end;
+						inpoint++
+					){
+						if (curnode.fullname < inpoint->fullname){
+							break;
+						}
+					}
 					this->contents.insert(inpoint, curnode);
 					localsize++;
 				}
