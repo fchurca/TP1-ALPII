@@ -405,6 +405,7 @@ namespace custom{
 				node * to_add = new node(data, NULL, this->first);
 				this->first->prev = to_add;
 				this->first = to_add;
+				it = this->begin();
 		// Iterador en el medio de la lista
 			}else{
 				this->Size++;
