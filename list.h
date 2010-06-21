@@ -1,9 +1,10 @@
 /*******************************************************************************
  *	list.h
- *	Librería de lista simplemente enladada, con punteros a inicio y final
- *	Implementación de lista:      Fiona González Lisella (Padrón 91454)
- *	Implementación de iteradores: Federico Churca Torrusio (Padrón 91352)
- *	Documentación:                Federico Churca Torrusio (Padrón 91352)
+ *	Librería de lista doblemente enladada, con punteros a inicio y final
+ *	Implementación de lista simple: Fiona González Lisella (Padrón 91454)
+ *	Implementación de lista doble:  Federico Churca Torrusio (Padrón 91352)
+ *	Implementación de iteradores:   Federico Churca Torrusio (Padrón 91352)
+ *	Documentación:                  Federico Churca Torrusio (Padrón 91352)
 *******************************************************************************/
 #ifndef __LIST_H__
 #define __LIST_H__
@@ -57,6 +58,7 @@ namespace custom{
 	// custom::list::node
 	//	Nodo de almacenamiento de una lista simplemente enlazada
 	//	Miembros:
+	//		prev		//	Puntero a nodo previo
 	//		next		//	Puntero a nodo siguiente
 	//		data		//	Datos almacenados
 	//	Métodos:
@@ -65,8 +67,11 @@ namespace custom{
 	//		Constructor copiador
 		class node{
 		public:
+			node
+		// Puntero al nodo previo en la lista. NULL si primer elemento.
+				*prev,
 		// Puntero al nodo siguiente en la lista. NULL si último elemento.
-			node * next;
+				*next;
 		// Datos almacenados en el nodo
 			T data;
 		public:
@@ -75,22 +80,23 @@ namespace custom{
 		//	Precondiciones:
 		//		(ninguna)
 		//	Postcondiciones:
-		//		* El nodo se marca como último en una lista. Ésto se hace para
+		//		* El nodo se marca como único y sin padre. Ésto se hace para
 		//	que, si se usa, que haga el menor daño posible; es altamente
 		//	recomendado inicializar manualmente el nodo y no dejarlo en este
 		//	estado.	
 			node(){
-				this->next = NULL;
+				this->next = this->prev = this->parent =NULL;
 			}
 		//******************
 		// Constructor por inicialización de datos
 		//	Precondiciones:
 		//		(ninguna)
 		//	Postcondiciones:
-		//		* El nodo se inicializa con los datos dados, apuntando al nodo
-		//			siguiente dado
-			node(const T & data, node * next){
+		//		* El nodo se inicializa con los datos dados, apuntando a los
+		//			nodos previo y siguiente dados
+			node(const T & data, node * prev, node * next){
 				this->data = data;
+				this->prev = prev;
 				this->next = next;
 			}
 		//******************
@@ -101,6 +107,7 @@ namespace custom{
 		//		* El nodo es una copia del nodo dado
 			node(const node & other){
 				this->data = other.data;
+				this->prev = other.prev;
 				this->next = other.next;
 			}
 		// Permitir a list acceder a los miembros protegidos de node
@@ -162,11 +169,14 @@ namespace custom{
 		// Operador de indirección
 		//	Precondiciones:
 		//		* El iterador debe haber sido inicializado
+		//		* El iterador no debe estar al final de la lista
 		//	Postcondiciones:
 		//		* Devuelve una referencia al contenido de la lista
 		//	correspondiente al iterador
 			T & operator*(){
-				if(this->initialized){
+				if(this->at_end){
+					throw std::logic_error("Iterator at end");
+				}else if(this->initialized){
 					return pos->data;
 				}else{
 					throw std::logic_error("Iterator not initialized");
@@ -180,7 +190,9 @@ namespace custom{
 		//		* Devuelve un puntero al contenido de la lista correspondiente
 		//	al iterador, para usar algún miembro suyo
 			T * operator->(){
-				if(this->initialized){
+				if(this->at_end){
+					throw std::logic_error("Iterator at end");
+				}else if(this->initialized){
 					return &(pos->data);
 				}else{
 					throw std::logic_error("Iterator not initialized");
@@ -221,8 +233,8 @@ namespace custom{
 		//		* El iterador no debe estar al final de la lista
 		//	Postcondiciones:
 		//		* El iterador avanza al próximo nodo
-		//		* Retorna una referencia al iterador, que ahora apunta al
-		//	próximo nodo
+		//		* Retorna una referencia al contenido del iterador, que ahora
+		//	apunta al próximo nodo
 			iterator & operator++(){
 				(*this)++;
 				return *this;
@@ -234,8 +246,7 @@ namespace custom{
 		//		* El iterador no debe estar al final de la lista
 		//	Postcondiciones:
 		//		* El iterador avanza al próximo nodo
-		//		* Retorna una referencia al iterador, que ahora apunta al
-		//	próximo nodo
+		//		* Retorna una referencia al contenido antiguo del iterador
 			iterator operator++(int){
 				iterator ret = *this;
 				if (this->initialized){
@@ -309,7 +320,7 @@ namespace custom{
 	//		* Agrega un elemento al final de la lista
 	//		* Incrementa el tamaño en un elemento más
 		void push_back(const T & data){
-			node * to_add = new node(data, NULL);
+			node * to_add = new node(data, this->last, NULL);
 			if (this->Size){
 				this->last->next = to_add;
 			}else{
@@ -332,7 +343,9 @@ namespace custom{
 				this->first = this->first->next;
 				delete aux;
 				this->Size--;
-				if (!this->Size){
+				if (this->Size){
+					this->first->prev = NULL;
+				}else{
 					this->last = NULL;
 				}
 				return ret;
@@ -381,23 +394,23 @@ namespace custom{
 				throw std::logic_error("Iterator not initialized");
 			}else if (it.parent != this){
 				throw std::logic_error("Wrong iterator parent");
+		// Iterador al final, o lista vacía
 			}else if (it.at_end || ! this->Size){
 				push_back(data);
 				it.pos = this->last;
 				it.at_end = false;
+		// Primer elemento
 			}else if (it.pos == this->first || ! it.pos){
 				this->Size++;
-				node * to_add = new node(data, this->first);
+				node * to_add = new node(data, NULL, this->first);
+				this->first->prev = to_add;
 				this->first = to_add;
-				if (! this->Size){
-					this->last = to_add;
-				}
+		// Iterador en el medio de la lista
 			}else{
-			// TODO: UNBORK
 				this->Size++;
-				node * to_add = new node(it.pos->data, it.pos->next);
-				it.pos->next = to_add;
-				it.pos->data = data;
+				node * to_add = new node(data, it.pos->prev, it.pos);
+				it.pos->prev->next = to_add;
+				it.pos->prev = to_add;
 			}
 		}
 	};
