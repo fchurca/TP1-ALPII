@@ -120,13 +120,13 @@ std::string humansize(unsigned long size){
 	const char pows[] = "BKMGTPEZY";
 	std::stringstream ss;
 	unsigned long scale = 1;
-	while ((size > 1024) && (scale < sizeof(pows))){
-		size >>= 10;
+	while ((size > 1000) && (scale < sizeof(pows))){
+		size %= 1000;
 		scale++;
 	}
 	ss << size << ' ' << pows[scale - 1];
 	if (scale > 1){
-		ss << "iB";
+		ss << 'B';
 	}
 	return ss.str();
 }
