@@ -17,7 +17,8 @@ int main(int argc, char **argv){
 		stringstream inputscript;
 		FSModel mymodel;
 		bool helped = false;
-		for(int c; !helped && ((c = getopt(argc, argv, "d:e:so:h")) != -1); ){
+		bool interactive = true;
+		for(int c; !helped && ((c = getopt(argc, argv, "d:e:so:hb")) != -1); ){
 			try{
 				switch (c){
 				case 'd':
@@ -33,9 +34,11 @@ int main(int argc, char **argv){
 					inputscript << "logfile " << optarg << endl;
 					break;
 				case 'h':
-					string usage(contents("usage"));
 					helped = true;
-					cout << usage;
+					cout << contents("usage");
+					break;
+				case 'b':
+					interactive = false;
 					break;
 				}
 			}catch(runtime_error e){
@@ -44,8 +47,9 @@ int main(int argc, char **argv){
 		}
 		if (!helped){
 			parser(inputscript, cout, mymodel, false);
-			cout << "Type \"help\"<return> for help" << endl;
-			parser(cin, cout, mymodel);
+			if (interactive){
+				parser(cin, cout, mymodel);
+			}
 		}
 	}catch(runtime_error e){
 		cerr << e.what() << endl << "Aborting" << endl;

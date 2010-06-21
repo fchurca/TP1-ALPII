@@ -5,6 +5,7 @@ Usage: {TPIL, TPIV, TPIT} [OPTION]...
   -s            perform a search
   -o            copy search session log to FILENAME
   -h            display this help and exit
+  -b            batch mode (don't run console after processing flags)
 
   For usage of the interactive command line, use the 'help' command or refer to
 the supplied documentation.
