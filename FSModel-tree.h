@@ -1,5 +1,6 @@
 #ifndef __FSMODEL_TREE_H__
 #define __FSMODEL_TREE_H__
+
 #include "expr.h"
 #include "tree.h"
 #include "FModel.h"
@@ -105,6 +106,9 @@ public:
 		return this->contents.data().getfullname();
 	}
 	unsigned load(const std::string & path){
+		if(!FModel(path).getisDirectory()){
+			throw std::runtime_error(std::string(path) + " not a valid dir");
+		}
 		return this->_load(path, this->contents);
 	}
 	unsigned dump(std::ostream & out){
@@ -129,4 +133,5 @@ public:
 			<< "\" turned out  " << found << " results" << std::endl;
 	}
 };
+
 #endif	// __FSMODEL-TREE_H__
