@@ -1,6 +1,8 @@
 ####################################
 # TPIX: main binaries
 
+all: TPIV TPIL TPIT
+
 TPIV: main.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp
 	c++ $? -g -o $@ -DFSMODEL_VECTOR
 
