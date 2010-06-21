@@ -1,3 +1,5 @@
+#ifndef __FSMODEL_TREE_H__
+#define __FSMODEL_TREE_H__
 #include "expr.h"
 #include "tree.h"
 #include "FModel.h"
@@ -96,6 +98,12 @@ public:
 	void clear(){
 		this->contents.clear();
 	}
+	unsigned getsize(){
+		return this->contents.data().getsize();
+	}
+	std::string getpath(){
+		return this->contents.data().getfullname();
+	}
 	unsigned load(const std::string & path){
 		return this->_load(path, this->contents);
 	}
@@ -121,16 +129,4 @@ public:
 			<< "\" turned out  " << found << " results" << std::endl;
 	}
 };
-
-#ifndef FSMODEL_TREE
-
-using namespace std;
-int main(int argc, char **argv){
-	FSModel arbol;
-	arbol.load(argv[1]);
-	arbol.dump(cout);
-	arbol.search(cout, "*ETAL*");
-	return EXIT_SUCCESS;
-}
-
-#endif
+#endif	// __FSMODEL-TREE_H__

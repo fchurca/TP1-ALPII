@@ -1,12 +1,15 @@
 #ifndef __FSMODEL_H__
 #define __FSMODEL_H__
 
+#if defined FSMODEL_TREE
+	#include "FSModel-tree.h"
+#else
+
 #if defined(FSMODEL_LIST) && defined(FSMODEL_VECTOR)
 	#error "Define one and only one of FSMODEL_LIST or FSMODEL_VECTOR!"
 #else
 
 #include "FModel.h"
-
 #include <ostream>
 
 #if ! (defined(FSMODEL_LIST) || defined(FSMODEL_VECTOR))
@@ -89,5 +92,7 @@ protected:
 #endif	// ! (defined(FSMODEL_LIST) || defined(FSMODEL_VECTOR))
 
 #endif	// defined(FSMODEL_LIST) && defined(FSMODEL_VECTOR)
+
+#endif	// defined FSMODEL_TREE
 
 #endif	// __FSMODEL_H__
