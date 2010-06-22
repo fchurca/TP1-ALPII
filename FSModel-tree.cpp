@@ -134,7 +134,7 @@ int main(int argc, char **argv){
 	FSModel arbol;
 	arbol.load(argv[1]);
 	arbol.dump(cout);
-	arbol.search(cout, "*ETAL*");
+	arbol.search(cout, argv[2]);
 	return EXIT_SUCCESS;
 }
 
