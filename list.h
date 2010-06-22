@@ -20,7 +20,7 @@
 namespace custom{
 //**************************************
 // custom::list
-//	Lista simplemente enlazada con punteros a primer y último elemento
+//	Lista doblemente enlazada con punteros a primer y último elemento
 //	Structs propios:
 //		node		//	Nodo de almacenamiento
 //		iterator	//	Iterador progresivo
