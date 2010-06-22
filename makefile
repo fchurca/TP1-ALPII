@@ -3,13 +3,13 @@
 
 all: TPIV TPIL TPIT
 
-TPIV: main.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp
+TPIV: main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp
 	c++ $? -g -o $@ -DFSMODEL_VECTOR
 
-TPIL: main.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp
+TPIL: main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp
 	c++ $? -g -o $@ -DFSMODEL_LIST
 	
-TPIT: main.cpp expr.cpp FModel.cpp tui.cpp
+TPIT: main.cpp Cronometro.cpp expr.cpp FSModel-tree.cpp FModel.cpp tui.cpp
 	c++ $? -g -o $@ -DFSMODEL_TREE
 
 ####################################

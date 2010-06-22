@@ -1,4 +1,11 @@
-@ECHO off
+@ECHO OFF
+REM	menu.bat
+REM	Archivo de lotes para manejo y ejecución de TPI-ALPII
+REM	Autores:
+REM		Fiona Gonzalez Lisella
+REM		Nicolas Sama
+REM		Federico Churca
+
 color 71
 
 TITLE Programa de Busqueda
@@ -17,38 +24,27 @@ ECHO                 Trabajo Practico
 ECHO.
 ECHO.
 ECHO.
-
 ECHO 		Integrantes: 
 ECHO.
 ECHO.
-
 ECHO 	Federico Churca
 ECHO.
 ECHO 	Nicolas Sama
 ECHO.
-ECHO 	Mariano
+ECHO 	Mariano Fernandez Vidal
 ECHO.
-ECHO 	Martin 
+ECHO 	Martin Muñoz
 ECHO.
 ECHO 	Fiona Gonzalez Lisella
 ECHO.
 ECHO.
-
 ECHO Por favor presione cualquier tecla para continuar
-
 PAUSE > nul
 
-GOTO menu
-
-
- 
 :Menu
 TITLE Programa de Busqueda 
 CLS
-ECHO.
-ECHO.
 ECHO Bienvenido al programa de busqueda.
-ECHO.
 ECHO.
 ECHO 1. Buscar Utilizando Lista
 ECHO.
@@ -56,7 +52,7 @@ ECHO 2. Buscar Utilizando Vector
 ECHO.
 ECHO 3. Buscar Utilizando Arbol
 ECHO.
-ECHO 4. Clean
+ECHO 4. Regenerar ejecutables
 ECHO.
 ECHO 5. Ayuda
 ECHO.
@@ -81,12 +77,9 @@ ECHO Ha elegido un numero incorrecto
 ECHO Has escrito "%menup%". Debe escribir el numero que indica la opcion.
 ECHO Pulse una tecla para volver al menu.
 PAUSE > nul
- 
 GOTO Menu
 
- 
 :makelista
-
 CLS
 ECHO.
 ECHO Bienvenido a la busqueda por Lista
@@ -96,10 +89,8 @@ ECHO.
 ECHO Pulse una tecla para volver
 PAUSE > nul
 GOTO Menu
- 
 
 :makevector
-
 CLS
 ECHO.
 ECHO Bienvenido a la busqueda por vector
@@ -109,38 +100,30 @@ ECHO.
 ECHO Pulse una tecla para volver
 PAUSE > nul
 GOTO Menu
- 
- 
- 
-:makearbol
 
+:makearbol
 CLS
-ECHO Bienvenido a la busqueda por arbol enario
+ECHO Bienvenido a la busqueda por arbol eneario
 ECHO.
 START TPIA.exe
 ECHO.
-
 ECHO.
 ECHO Pulse una tecla para volver menu
 PAUSE > nul
 GOTO Menu
- 
+
 :makemanual
 CLS
 ECHO.
 START Manual.doc
 ECHO.
 ECHO Pulse una tecla para volver menu
-
 PAUSE > nul
 GOTO Menu
- 
- 
-:boolGen
 
-CLS
+:boolGen
 ECHO.
-ECHO ¿Desea regenerar todos los archivos?
+ECHO Esto eliminará los ejecutables existentes primero. ¿Continuar?
 ECHO.
 ECHO 1. Si
 ECHO.
@@ -155,20 +138,18 @@ ECHO.
 ECHO.
 
 :makegen
-
 DEL *.exe *.o
-c++ main.cpp expr.cpp FSMoDEL.cpp FMoDEL.cpp tui.cpp -g -o TPIL -DFSMODEL_LIST
+c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIL -DFSMODEL_LIST
 DEL *.o
-c++ main.cpp expr.cpp FSMoDEL.cpp FMoDEL.cpp tui.cpp -g -o TPIV -DFSMODEL_VECTOR
+c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIV -DFSMODEL_VECTOR
 DEL *.o
-c++ main.cpp expr.cpp fsmoDEL.cpp fsnode.cpp tui.cpp -g -o TPIA -DFSMODEL_ARBOL
-ECHO Se han regenerado todos los ejecutables.
+c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIT -DFSMODEL_ARBOL
+ECHO.
+ECHO Se han regenerado todos los ejecutables
 ECHO.
 ECHO.
 ECHO Presione una tecla para volver al menu
 ECHO.
-PAUSE>nul
+PAUSE > nul
 GOTO Menu
-
-
 
