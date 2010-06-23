@@ -143,7 +143,7 @@ c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIL -
 DEL *.o
 c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIV -DFSMODEL_VECTOR
 DEL *.o
-c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIT -DFSMODEL_ARBOL
+c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIT -DFSMODEL_TREE
 ECHO.
 ECHO Se han regenerado todos los ejecutables
 ECHO.
