@@ -102,6 +102,9 @@ std::string FSModel::getpath(){
 	return this->contents.data().getfullname();
 }
 unsigned FSModel::load(const std::string & path){
+	if(!FModel(path).getisDirectory()){
+		throw std::runtime_error(path + " not a valid dir");
+	}
 	this->contents.data().name = path;
 	return this->_load(path, this->contents);
 }
