@@ -51,7 +51,8 @@ void parser(
 	unsigned long long
 		minsize = 0,
 		maxsize = ULLONG_MAX;
-	while (in){	
+	ofstream log;
+	while (in){
 		try{
 			string
 				dump,
@@ -65,6 +66,9 @@ void parser(
 			ss >> command;
 			if (command == "dump"){
 				model.dump(out);
+				if(log.is_open()){
+					model.dump(log);
+				}
 			}else if (command == "exit"){
 				return;
 			}else if (command == "expr"){
@@ -85,10 +89,21 @@ void parser(
 					<< " us" << endl
 					<< "Loaded " << model.getsize()
 					<< " elements" << endl;
+				if(log.is_open()){
+					log
+						<< "Load finished: " << cron.getTiempoTranscurrido()
+						<< " us" << endl
+						<< "Loaded " << model.getsize()
+						<< " elements" << endl;
+				}
 			}else if (command == "logfile"){
 				ss >> ws;
 				getline(ss, logfilename);
 				logfilename = cleanup(logfilename);
+				if (log.is_open()){
+					log.close();
+				}
+				log.open(logfilename.c_str(), ofstream::app);
 			}else if (command == "maxsize"){
 				ss >> maxsize;
 			}else if (command == "minsize"){
@@ -97,6 +112,9 @@ void parser(
 				expression = "*";
 			}else if (command == "nolog"){
 				logfilename.clear();
+				if (log.is_open()){
+					log.close();
+				}
 			}else if (command == "nomax"){
 				maxsize = ULLONG_MAX;
 			}else if (command == "nomin"){
@@ -108,6 +126,12 @@ void parser(
 				out
 					<< "Search completed in "
 					<< cron.getTiempoTranscurrido() << " us" << endl;
+				if(log.is_open()){
+					model.search(log, expression, maxsize, minsize);
+					log
+						<< "Search completed in "
+						<< cron.getTiempoTranscurrido() << " us" << endl;
+				}
 			}else if (command == "status"){
 				out
 					<< "Path:\t\t\"" << model.getpath() << '\"' << endl
@@ -132,6 +156,31 @@ void parser(
 					out << "(none)";
 				}
 				out << endl;
+				if(log.is_open()){
+					log
+						<< "Path:\t\t\"" << model.getpath() << '\"' << endl
+						<< "Total files:\t" << model.getsize() << endl
+						<< "Expression:\t\"" << expression << '\"' << endl
+						<< "Minimum size:\t";
+					if (minsize){
+						log << minsize;
+					}else{
+						log << "(none)";
+					}
+					log << endl << "Maximum size:\t";
+					if (maxsize < ULLONG_MAX) {
+						log << maxsize;
+					}else{
+						log << "(none)";
+					}
+					log << endl << "Log file:\t";
+					if (logfilename.length()){
+						log << '\"' << logfilename << '\"';
+					}else{
+						log << "(none)";
+					}
+					log << endl;
+				}
 			}else{
 				if (command.length()){
 					out << command << ": command not found" << endl;
@@ -140,5 +189,8 @@ void parser(
 		}catch(runtime_error e){
 			cerr << e.what() << endl;
 		}
+	}
+	if (log.is_open()){
+		log.close();
 	}
 }
