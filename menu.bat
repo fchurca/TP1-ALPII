@@ -33,7 +33,7 @@ ECHO 	Nicolas Sama
 ECHO.
 ECHO 	Mariano Fernandez Vidal
 ECHO.
-ECHO 	Martin Muñoz
+ECHO 	Martin Munoz
 ECHO.
 ECHO 	Fiona Gonzalez Lisella
 ECHO.
@@ -105,7 +105,7 @@ GOTO Menu
 CLS
 ECHO Bienvenido a la busqueda por arbol eneario
 ECHO.
-START TPIA.exe
+START TPIT.exe
 ECHO.
 ECHO.
 ECHO Pulse una tecla para volver menu
@@ -115,7 +115,7 @@ GOTO Menu
 :makemanual
 CLS
 ECHO.
-START Manual.doc
+START Manual.pdf
 ECHO.
 ECHO Pulse una tecla para volver menu
 PAUSE > nul
@@ -141,7 +141,7 @@ ECHO.
 DEL *.exe
 c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIL -DFSMODEL_LIST
 c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIV -DFSMODEL_VECTOR
-c++ main.cpp Cronometro.cpp expr.cpp FSModel.cpp FModel.cpp tui.cpp -g -o TPIT -DFSMODEL_TREE
+c++ main.cpp Cronometro.cpp expr.cpp FSModel-tree.cpp FModel.cpp tui.cpp -g -o TPIT -DFSMODEL_TREE
 ECHO.
 ECHO Se han regenerado todos los ejecutables
 ECHO.
