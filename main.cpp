@@ -18,7 +18,7 @@ int main(int argc, char **argv){
 		FSModel mymodel;
 		bool helped = false;
 		bool interactive = true;
-		for(int c; !helped && ((c = getopt(argc, argv, "d:e:so:hb")) != -1); ){
+		for(int c; !helped && ((c = getopt(argc, argv, "d:e:M:m:sDo:hb")) != -1); ){
 			try{
 				switch (c){
 				case 'd':
@@ -27,8 +27,17 @@ int main(int argc, char **argv){
 				case 'e':
 					inputscript << "expr " << optarg << endl;
 					break;
+				case 'M':
+					inputscript << "maxsize " << optarg << endl;
+					break;
+				case 'm':
+					inputscript << "minsize " << optarg << endl;
+					break;
 				case 's':
 					inputscript << "search" << endl;
+					break;
+				case 'D':
+					inputscript << "dump" << endl;
 					break;
 				case 'o':
 					inputscript << "logfile " << optarg << endl;
