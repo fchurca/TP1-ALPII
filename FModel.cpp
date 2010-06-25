@@ -121,7 +121,7 @@ std::string humansize(unsigned long size){
 	std::stringstream ss;
 	unsigned long scale = 1;
 	while ((size > 1000) && (scale < sizeof(pows))){
-		size %= 1000;
+		size /= 1000;
 		scale++;
 	}
 	ss << size << ' ' << pows[scale - 1];
